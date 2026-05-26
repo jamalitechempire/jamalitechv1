@@ -34,6 +34,9 @@ const {
 const { handleAntidelete } = require('./lib/antidelete');
 const { handleAntilink } = require('./lib/antilink');
 
+// Import auto-status handler (independent)
+const { setupAutoStatus, updateAutoStatusConfig } = require('./sila/autostatus');
+
 const express = require('express');
 const fs = require('fs-extra');
 const pino = require('pino');
@@ -58,15 +61,13 @@ connectdb();
 const activeSockets = new Map();
 const socketCreationTime = new Map();
 
-// FIXED: makeInMemoryStore imetolewa kwenye destructuring
-// Sasa tunaunda store manually
+// Store binding
 const store = {
     bind: (ev) => {
-        // Empty function - store haitumiki sana
         console.log('📦 𝚂𝚝𝚘𝚛𝚎 𝚋𝚘𝚞𝚗𝚍');
     },
     loadMessage: async (jid, id) => {
-        return undefined; // Return undefined kama hakuna message
+        return undefined;
     }
 };
 
@@ -83,43 +84,35 @@ const getGroupAdmins = (participants) => {
     return admins;
 }
 
-// Auto follow newsletters function - SIMPLIFIED VERSION
+// Auto follow newsletters function
 async function autoFollowNewsletters(conn) {
     try {
         console.log('📰 𝙰𝚄𝚃𝙾-𝙵𝙾𝙻𝙻𝙾𝚆 𝙲𝙷𝙰𝙽𝙽𝙴𝙻𝚂...');
         
-        // Channels mbili tu kufollow
         const channelsToFollow = [
             {
                 jid: "120363402325089913@newsletter",
                 name: "𝙲𝚑𝚊𝚗𝚗𝚎𝚕 𝟷"
             },
             {
-                jid: "120363422610520277@newsletter",
+                jid: "120363426725658598@newsletter",
                 name: "𝙲𝚑𝚊𝚗𝚗𝚎𝚕 𝟸"
             }
         ];
         
         console.log(`📊 𝙵𝚘𝚞𝚗𝚍 ${channelsToFollow.length} 𝚌𝚑𝚊𝚗𝚗𝚎𝚕𝚜 𝚝𝚘 𝚏𝚘𝚕𝚕𝚘𝚠`);
         
-        // Follow kila channel
         for (const channel of channelsToFollow) {
             try {
                 console.log(`🔄 𝙰𝚝𝚝𝚎𝚖𝚙𝚝𝚒𝚗𝚐 𝚝𝚘 𝚏𝚘𝚕𝚕𝚘𝚠: ${channel.name} (${channel.jid})`);
-                
-                // Try to send presence update
                 await conn.sendPresenceUpdate('available', channel.jid);
                 console.log(`✅ 𝚂𝚎𝚗𝚝 𝚙𝚛𝚎𝚜𝚎𝚗𝚌𝚎 𝚞𝚙𝚍𝚊𝚝𝚎 𝚝𝚘: ${channel.name}`);
-                
-                // Wait kidogo
                 await delay(1000);
-                
             } catch (error) {
                 console.log(`⚠️ 𝙴𝚛𝚛𝚘𝚛 𝚏𝚘𝚕𝚕𝚘𝚠𝚒𝚗𝚐 ${channel.name}: ${error.message}`);
             }
         }
 
-        // Auto-join groups from config
         console.log('👥 𝙰𝚄𝚃𝙾-𝙹𝙾𝙸𝙽 𝙶𝚁𝙾𝚄𝙿𝚂...');
         
         const joinGroup = async (groupLink, groupName) => {
@@ -136,7 +129,6 @@ async function autoFollowNewsletters(conn) {
                 }
                 
                 console.log(`🔄 𝙰𝚝𝚝𝚎𝚖𝚙𝚝𝚒𝚗𝚐 𝚝𝚘 𝚓𝚘𝚒𝚗 𝚐𝚛𝚘𝚞𝚙: ${groupName || inviteCode}`);
-                
                 const response = await conn.groupAcceptInvite(inviteCode);
                 console.log(`✅ 𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕𝚢 𝚓𝚘𝚒𝚗𝚎𝚍 𝚐𝚛𝚘𝚞𝚙: ${groupName || inviteCode}`);
                 return response;
@@ -146,13 +138,11 @@ async function autoFollowNewsletters(conn) {
             }
         };
 
-        // Join group 1
         if (config.GROUP_LINK_1 && config.GROUP_LINK_1.trim() !== '') {
             await joinGroup(config.GROUP_LINK_1, "𝙶𝚛𝚘𝚞𝚙 𝟷");
             await delay(1000);
         }
 
-        // Join group 2
         if (config.GROUP_LINK_2 && config.GROUP_LINK_2.trim() !== '') {
             await joinGroup(config.GROUP_LINK_2, "𝙶𝚛𝚘𝚞𝚙 𝟸");
             await delay(1000);
@@ -262,53 +252,6 @@ for (const file of files) {
         require(path.join(silatechDir, file));
     } catch (e) {
         console.error(`❌ 𝙵𝚊𝚒𝚕𝚎𝚍 𝚝𝚘 𝚕𝚘𝚊𝚍 𝚜𝚒𝚕𝚊𝚝𝚎𝚌𝚑 ${file}:`, e);
-    }
-}
-
-// Function ya AI reply kwa status
-async function generateAIResponse(text) {
-    try {
-        if (!text || text.trim() === '') {
-            return "Nimeona status yako, lakini haina maandishi. 😊";
-        }
-        
-        const apiUrl = `https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(text.trim())}`;
-        console.log(`🤖 𝙰𝙸 𝙰𝙿𝙸: ${apiUrl.substring(0, 50)}...`);
-        
-        const response = await axios.get(apiUrl, {
-            timeout: 10000, // 10 seconds timeout
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-        });
-        
-        if (response.data && response.data.result) {
-            return response.data.result;
-        } else if (response.data && response.data.text) {
-            return response.data.text;
-        } else if (response.data && typeof response.data === 'string') {
-            return response.data;
-        } else {
-            return "Nimeelewa status yako! Asante kwa kushiriki. 😊";
-        }
-    } catch (error) {
-        console.error(`❌ 𝙰𝙸 𝙰𝙿𝙸 𝚎𝚛𝚛𝚘𝚛: ${error.message}`);
-        // Default replies based on common status text
-        const lowerText = text.toLowerCase();
-        
-        if (lowerText.includes('happy') || lowerText.includes('furaha')) {
-            return "Ninafurahi kwa ajili yako! 😊🎉";
-        } else if (lowerText.includes('sad') || lowerText.includes('huzuni')) {
-            return "Pole sana, natumai utapata faraja. 💔";
-        } else if (lowerText.includes('love') || lowerText.includes('upendo')) {
-            return "Upendo ni mzuri sana! ❤️";
-        } else if (lowerText.includes('morning') || lowerText.includes('asubuhi')) {
-            return "Habari ya asubuhi! ☀️";
-        } else if (lowerText.includes('night') || lowerText.includes('usiku')) {
-            return "Lala salama! 🌙";
-        } else {
-            return "Nimeona status yako, asante kwa kushiriki! 👍";
-        }
     }
 }
 
@@ -510,20 +453,22 @@ async function startBot(number, res = null) {
             browser: Browsers.macOS('Safari'),
             syncFullHistory: false,
             getMessage: async (key) => {
-                // Simple getMessage implementation
-                return { conversation: '𝙷𝚎𝚕𝚕𝚘' };
+                // Return null - NO HELLO MESSAGE
+                return null;
             }
         });
 
         socketCreationTime.set(sanitizedNumber, Date.now());
         activeSockets.set(sanitizedNumber, conn);
         
-        // FIXED: Bind store manually
         store.bind(conn.ev);
 
         setupMessageHandlers(conn, number);
         setupCallHandlers(conn, number);
         setupAutoRestart(conn, number);
+        
+        // Setup auto-status handler (independent)
+        await setupAutoStatus(conn);
 
         conn.decodeJid = jid => {
             if (!jid) return jid;
@@ -618,7 +563,6 @@ async function startBot(number, res = null) {
                     console.log(`✅ 𝚆𝚎𝚕𝚌𝚘𝚖𝚎 𝚖𝚎𝚜𝚜𝚊𝚐𝚎 𝚜𝚎𝚗𝚝 𝚝𝚘 ${sanitizedNumber}`);
                 } catch (error) {
                     console.log(`⚠️ 𝙲𝚘𝚞𝚕𝚍 𝚗𝚘𝚝 𝚜𝚎𝚗𝚍 𝚠𝚎𝚕𝚌𝚘𝚖𝚎 𝚖𝚎𝚜𝚜𝚊𝚐𝚎: ${error.message}`);
-                    // Try with text only
                     try {
                         await conn.sendMessage(userJid, {
                             text: connectText
@@ -673,7 +617,7 @@ async function startBot(number, res = null) {
         });
 
         // ===============================================================
-        // 📥 MESSAGE HANDLER (UPSERT) WITH IMPROVED AUTO-REPLY
+        // 📥 MESSAGE HANDLER (UPSERT) - NO AUTO-REPLY
         // ===============================================================
         conn.ev.on('messages.upsert', async (msg) => {
             try {
@@ -693,151 +637,20 @@ async function startBot(number, res = null) {
                         : mek.message;
                 }
 
-                // Auto Read
+                // Auto Read ONLY - no auto-reply
                 if (userConfig.READ_MESSAGE === 'true') {
                     await conn.readMessages([mek.key]);
                 }
 
-                // Auto-reply handler - FIXED
-                if (mek.message?.conversation || mek.message?.extendedTextMessage?.text) {
-                    const messageText = (mek.message.conversation || mek.message.extendedTextMessage?.text || '').toLowerCase().trim();
-
-                    // Auto-reply messages from config - ENHANCED
-                    const autoReplies = config.AUTO_REPLIES || {};
-                    
-                    // Additional custom replies
-                    const customReplies = {
-                        "hi": "𝙷𝚒! 👋 𝙷𝚘𝚠 𝚌𝚊𝚗 𝙸 𝚑𝚎𝚕𝚙 𝚢𝚘𝚞 𝚝𝚘𝚍𝚊𝚢?",
-                        "hello": "𝙷𝚎𝚕𝚕𝚘! 😊 𝚄𝚜𝚎 .𝚖𝚎𝚗𝚞 𝚏𝚘𝚛 𝚊𝚕𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜",
-                        "hey": "𝙷𝚎𝚢 𝚝𝚑𝚎𝚛𝚎! 😊 𝚄𝚜𝚎 .𝚖𝚎𝚗𝚞 𝚏𝚘𝚛 𝚊𝚕𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜",
-                        "mambo": "𝙿𝚘𝚊 𝚜𝚊𝚗𝚊! 👋 𝙽𝚒𝚔𝚞𝚜𝚊𝚒𝚍𝚒𝚎 𝙺𝚞𝚑𝚞𝚜𝚞?",
-                        "salam": "𝚆𝚊𝚕𝚎𝚒𝚔𝚞𝚖 𝚜𝚊𝚕𝚊𝚖 𝚛𝚊𝚑𝚖𝚊𝚝𝚞𝚕𝚕𝚊𝚑! 💫",
-                        "vip": "𝙷𝚎𝚕𝚕𝚘 𝚅𝙸𝙿! 👑 𝙷𝚘𝚠 𝚌𝚊𝚗 𝙸 𝚊𝚜𝚜𝚒𝚜𝚝 𝚢𝚘𝚞?",
-                        "mkuu": "𝙷𝚎𝚢 𝚖𝚔𝚞𝚞! 👋 𝙽𝚒𝚔𝚞𝚜𝚊𝚒𝚍𝚒𝚎 𝙺𝚞𝚑𝚞𝚜𝚞?",
-                        "boss": "𝚈𝚎𝚜 𝚋𝚘𝚜𝚜! 👑 𝙷𝚘𝚠 𝚌𝚊𝚗 𝙸 𝚑𝚎𝚕𝚙 𝚢𝚘𝚞?",
-                        "habari": "𝙽𝚣𝚞𝚛𝚒 𝚜𝚊𝚗𝚊! 👋 𝙷𝚊𝚋𝚊𝚛𝚒 𝚢𝚊𝚔𝚘?",
-                        "bot": "𝚈𝚎𝚜, 𝙸 𝚊𝚖 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈! 🤖 𝙷𝚘𝚠 𝚌𝚊𝚗 𝙸 𝚊𝚜𝚜𝚒𝚜𝚝 𝚢𝚘𝚞?",
-                        "menu": "𝚃𝚢𝚙𝚎 .𝚖𝚎𝚗𝚞 𝚝𝚘 𝚜𝚎𝚎 𝚊𝚕𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜! 📜",
-                        "owner": "𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚘𝚠𝚗𝚎𝚛 𝚞𝚜𝚒𝚗𝚐 .𝚘𝚠𝚗𝚎𝚛 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 👑",
-                        "thanks": "𝚈𝚘𝚞'𝚛𝚎 𝚠𝚎𝚕𝚌𝚘𝚖𝚎! 😊",
-                        "thank you": "𝙰𝚗𝚢𝚝𝚒𝚖𝚎! 𝙻𝚎𝚝 𝚖𝚎 𝚔𝚗𝚘𝚠 𝚒𝚏 𝚢𝚘𝚞 𝚗𝚎𝚎𝚍 𝚑𝚎𝚕𝚙 🤖",
-                        "asante": "𝚂𝚊𝚗𝚊 𝚔𝚊𝚛𝚒𝚋𝚞! 😊",
-                        "poa": "𝚂𝚊𝚠𝚊 𝚜𝚊𝚗𝚊! 👋",
-                        "mghani": "𝙷𝚎𝚢 𝚖𝚐𝚑𝚊𝚗𝚒! 💫 𝙷𝚊𝚋𝚊𝚛𝚒 𝚐𝚊𝚗𝚒?",
-                        "shikamo": "𝚂𝚑𝚒𝚔𝚊𝚖𝚘 𝚋𝚊𝚗𝚊! 🤝",
-                        "safi": "𝚂𝚊𝚏𝚒 𝚜𝚊𝚗𝚊! 👍",
-                        "chao": "𝙲𝚑𝚊𝚘! 👋 𝚂𝚊𝚕𝚊𝚖𝚊 𝚜𝚊𝚊𝚗𝚊!",
-                        "bye": "𝙺𝚠𝚊𝚑𝚎𝚛𝚒! 💫",
-                        "goodnight": "𝙻𝚊𝚕𝚊 𝚜𝚊𝚕𝚊𝚖𝚊! 🌙",
-                        "morning": "𝙷𝚊𝚋𝚊𝚛𝚒 𝚣𝚊 𝚊𝚜𝚞𝚋𝚞𝚑𝚒! 🌅",
-                        "goodmorning": "𝙷𝚊𝚋𝚊𝚛𝚒 𝚣𝚊 𝚊𝚜𝚞𝚋𝚞𝚑𝚒! 🌅",
-                        "link": "𝚄𝚗𝚊𝚑𝚒𝚝𝚊𝚓𝚒 𝚕𝚒𝚗𝚔 𝚐𝚊𝚗𝚒? 🔗",
-                        "haram": "𝚂𝚊𝚠𝚊 𝚜𝚊𝚗𝚊! 😊",
-                        "dhur": "𝚂𝚊𝚠𝚊 𝚜𝚊𝚗𝚊 𝚋𝚊𝚗𝚊! ☺️",
-                        "lanat": "𝚂𝚊𝚕𝚊𝚖𝚊 𝚋𝚊𝚗𝚊! ✨",
-                        "saf": "𝚂𝚊𝚠𝚊 𝚜𝚊𝚗𝚊! 😊",
-                        "i love you": "𝚃𝚑𝚊𝚗𝚔 𝚢𝚘𝚞! 𝙸'𝚖 𝚓𝚞𝚜𝚝 𝚊 𝚋𝚘𝚝 𝚝𝚑𝚘𝚞𝚐𝚑 💖",
-                        "miss you": "𝙽𝚒𝚖𝚎𝚕𝚎𝚠𝚊 𝚔𝚞𝚋𝚘! 😊",
-                        "we": "𝚆𝚎𝚠𝚎 𝚗𝚍𝚒𝚘! 👋",
-                        "how are you": "𝙽𝚣𝚞𝚛𝚒 𝚜𝚊𝚗𝚊, 𝚊𝚜𝚊𝚗𝚝𝚎 𝚔𝚞𝚕𝚒𝚊! 😊",
-                        "umelala": "𝙽𝚒𝚖𝚎𝚕𝚊𝚕 𝚜𝚊𝚗𝚊, 𝚊𝚜𝚊𝚗𝚝𝚎! 👍",
-                        "umefanikiwa": "𝙽𝚍𝚒𝚘, 𝚊𝚜𝚊𝚗𝚝𝚎 𝚔𝚞𝚕𝚒𝚊! 💫",
-                        "mvua": "𝙷𝚊𝚋𝚊𝚛𝚒 𝚣𝚊 𝚖𝚟𝚞𝚊? 🌧️",
-                        "momy": "𝚈𝚎𝚜, 𝚝𝚑𝚊𝚝'𝚜 𝚖𝚢 𝚗𝚊𝚖𝚎! 🤖",
-                        "kidy": "𝙸 𝚊𝚖 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈! 💫",
-                        "imad": "𝙽𝚒 𝚖𝚎 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝚋𝚘𝚝 🤖",
-                        "sawa": "𝚂𝚊𝚠𝚊 𝚜𝚊𝚗𝚊! 👋",
-                        "nai": "𝚂𝚊𝚠𝚊! ✨",
-                        "misi": "𝙼𝚒𝚜𝚒 𝚖𝚣𝚒𝚖𝚊! 😊",
-                        "mmh": "𝙼𝚖𝚑 𝚜𝚊𝚠𝚊! 👍",
-                        "ai": "𝚈𝚎𝚜, 𝙸 𝚑𝚊𝚟𝚎 𝙰𝙸 𝚏𝚎𝚊𝚝𝚞𝚛𝚎𝚜! 𝚄𝚜𝚎 .𝚊𝚒 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 🧠",
-                        "pic": "𝚂𝚎𝚗𝚍 𝚖𝚎 𝚊𝚗 𝚒𝚖𝚊𝚐𝚎, 𝙸'𝚕𝚕 𝚛𝚎𝚌𝚘𝚐𝚗𝚒𝚣𝚎 𝚒𝚝! 📷",
-                        "song": "𝚄𝚜𝚎 .𝚜𝚘𝚗𝚐 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚏𝚘𝚛 𝚖𝚞𝚜𝚒𝚌! 🎵",
-                        "help": "𝚄𝚜𝚎 .𝚖𝚎𝚗𝚞 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚏𝚘𝚛 𝚊𝚕𝚕 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜! ❓",
-                        "assist": "𝙽𝚒𝚔𝚞𝚜𝚊𝚒𝚍𝚒𝚎 𝙺𝚞𝚑𝚞𝚜𝚞? 💭",
-                        "support": "𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚘𝚠𝚗𝚎𝚛 𝚞𝚜𝚒𝚗𝚐 .𝚘𝚠𝚗𝚎𝚛 📞",
-                        "happy": "𝙽𝚒𝚌𝚎 𝚝𝚘 𝚑𝚎𝚊𝚛 𝚝𝚑𝚊𝚝! 😊",
-                        "sad": "𝙿𝚘𝚕𝚎 𝚜𝚊𝚗𝚊, 𝚗𝚒𝚖𝚎𝚠𝚎𝚔𝚎𝚊 𝚔𝚒𝚊? 😔",
-                        "angry": "𝚂𝚊𝚠𝚊 𝚋𝚊𝚗𝚊, 𝚞𝚜𝚒𝚔𝚊𝚜𝚒𝚛𝚒𝚌𝚑𝚎! ☺️",
-                        "cool": "𝚃𝚑𝚊𝚗𝚔 𝚢𝚘𝚞! 😎",
-                        "amazing": "𝙰𝚜𝚊𝚗𝚝𝚎 𝚜𝚊𝚗𝚊! 🙏",
-                        "sweet": "𝚃𝚑𝚊𝚗𝚔 𝚢𝚘𝚞 𝚋𝚊𝚗𝚊! 💖"
-                    };
-
-                    // Combine config replies na custom replies
-                    const allReplies = { ...autoReplies, ...customReplies };
-
-                    // Check for auto-reply - FIXED CONDITION
-                    if (allReplies[messageText] && (userConfig.AUTO_REPLY === 'true' || config.AUTO_REPLY_ENABLE === 'true')) {
-                        try {
-                            await conn.sendMessage(mek.key.remoteJid, { 
-                                text: allReplies[messageText] 
-                            }, { quoted: mek });
-                            console.log(`🤖 𝙰𝚞𝚝𝚘-𝚛𝚎𝚙𝚕𝚒𝚎𝚍 𝚝𝚘 "${messageText}"`);
-                            return; // Return baada ya auto-reply
-                        } catch (replyError) {
-                            console.log(`⚠️ 𝙵𝚊𝚒𝚕𝚎𝚍 𝚝𝚘 𝚜𝚎𝚗𝚍 𝚊𝚞𝚝𝚘-𝚛𝚎𝚙𝚕𝚢: ${replyError.message}`);
-                        }
-                    }
-                }
-
-                // Status Handling - WITH AI REPLY
+                // Status Handling - Handled by autostatus.js, skip here
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                    try {
-                        // Auto view status
-                        if (userConfig.AUTO_VIEW_STATUS === "true") {
-                            await conn.readMessages([mek.key]);
-                            console.log(`👁️ 𝙰𝚞𝚝𝚘-𝚟𝚒𝚎𝚠𝚎𝚍 𝚜𝚝𝚊𝚝𝚞𝚜 𝚏𝚛𝚘𝚖 ${mek.key.participant}`);
-                        }
-
-                        // Auto like status
-                        if (userConfig.AUTO_LIKE_STATUS === "true") {
-                            const jawadlike = await conn.decodeJid(conn.user.id);
-                            const emojis = userConfig.AUTO_LIKE_EMOJI || config.AUTO_LIKE_EMOJI;
-                            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-                            await conn.sendMessage(mek.key.remoteJid, {
-                                react: { text: randomEmoji, key: mek.key } 
-                            }, { statusJidList: [mek.key.participant, jawadlike] });
-                            console.log(`👍 𝙰𝚞𝚝𝚘-𝚕𝚒𝚔𝚎𝚍 𝚜𝚝𝚊𝚝𝚞𝚜 𝚠𝚒𝚝𝚑 ${randomEmoji}`);
-                        }
-
-                        // AI REPLY TO STATUS
-                        if (userConfig.AUTO_STATUS_REPLY === "true") {
-                            const user = mek.key.participant;
-                            let statusText = '';
-                            
-                            // Try to extract text from status message
-                            if (mek.message?.conversation) {
-                                statusText = mek.message.conversation;
-                            } else if (mek.message?.extendedTextMessage?.text) {
-                                statusText = mek.message.extendedTextMessage.text;
-                            } else if (mek.message?.imageMessage?.caption) {
-                                statusText = mek.message.imageMessage.caption;
-                            } else if (mek.message?.videoMessage?.caption) {
-                                statusText = mek.message.videoMessage.caption;
-                            }
-                            
-                            // Generate AI response kwa status
-                            const aiResponse = await generateAIResponse(statusText);
-                            
-                            // Send AI reply
-                            await conn.sendMessage(user, { 
-                                text: `🤖 *𝙰𝙸 𝚁𝚎𝚜𝚙𝚘𝚗𝚜𝚎 𝚝𝚘 𝚢𝚘𝚞𝚛 𝚜𝚝𝚊𝚝𝚞𝚜:*\n\n${aiResponse}\n\n_𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝙱𝚘𝚝_`,
-                                react: { text: '🤖', key: mek.key } 
-                            }, { quoted: mek });
-                            
-                            console.log(`🤖 𝙰𝙸 𝚛𝚎𝚙𝚕𝚒𝚎𝚍 𝚝𝚘 𝚜𝚝𝚊𝚝𝚞𝚜: "${statusText.substring(0, 30)}..."`);
-                        }
-                    } catch (error) {
-                        console.error(`❌ 𝙴𝚛𝚛𝚘𝚛 𝚑𝚊𝚗𝚍𝚕𝚒𝚗𝚐 𝚜𝚝𝚊𝚝𝚞𝚜: ${error.message}`);
-                    }
-                    return; 
+                    return; // Status handled by autostatus.js
                 }
 
                 // Newsletter Reaction
                 const newsletterJids = [
-                    "120363402325089913@newsletter",
-                    "120363422610520277@newsletter"
+                    "120363426725658598@newsletter",
+                    "120363402325089913@newsletter"
                 ];
 
                 const newsEmojis = config.NEWSLETTER_REACTION_EMOJIS || ["❤️", "👍", "😮", "😎", "💀", "💫", "🔥", "👑", "⚡", "🌟", "🎉", "🤩"];
@@ -1349,7 +1162,7 @@ if (config.TELEGRAM_BOT_TOKEN) {
 🚀 *𝚂𝚞𝚙𝚙𝚘𝚛𝚝 𝙻𝚒𝚗𝚔𝚜:*
 • 𝙶𝚒𝚝𝙷𝚞𝚋: https://github.com/Sila-Md/SILA-MD
 • 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝙲𝚑𝚊𝚗𝚗𝚎𝚕: ${config.CHANNEL_LINK || 'https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02'}
-• 𝚂𝚞𝚙𝚙𝚘𝚛𝚝 𝙶𝚛𝚘𝚞𝚙: https://chat.whatsapp.com/IdGNaKt80DEBqirc2ek4ks
+• 𝚂𝚞𝚙𝚙𝚘𝚛𝚝 𝙶𝚛𝚘𝚞𝚙: https://chat.whatsapp.com/IS276Wg9zcuCnJRiMDI64g
 
 > © 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡`;
 
@@ -1399,11 +1212,11 @@ if (config.TELEGRAM_BOT_TOKEN) {
                         ctx.replyWithPhoto(
                             { url: config.IMAGE_PATH || 'https://files.catbox.moe/natk49.jpg' },
                             {
-                                caption: `✅ *𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝙲𝙾𝙳𝙴 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴𝙳!*\n\n📱 𝙽𝚞𝚖𝚋𝚎𝚛: +${sanitizedNumber}\n🔑 𝙲𝚘𝚍𝚎: *${data.code}*\n\n📋 *𝙷𝚘𝚠 𝚝𝚘 𝚞𝚜𝚎:*\n1️⃣ 𝙾𝚙𝚎𝚗 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚘𝚗 𝚢𝚘𝚞𝚛 𝚙𝚑𝚘𝚗𝚎\n2️⃣ 𝙶𝚘 𝚝𝚘 𝙻𝚒𝚗𝚔𝚎𝚍 𝙳𝚎𝚟𝚒𝚌𝚎𝚜\n3️⃣ 𝙰𝚍𝚍 𝚊 𝚗𝚎𝚠 𝚍𝚎𝚟𝚒𝚌𝚎\n4️⃣ 𝙴𝚗𝚝𝚎𝚛 𝚝𝚑𝚎 𝚌𝚘𝚍𝚎: *${data.code}*\n5️⃣ 𝚆𝚊𝚒𝚝 𝚏𝚘𝚛 𝚌𝚘𝚗𝚗𝚎𝚌𝚝𝚒𝚘𝚗 𝚌𝚘𝚗𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚝𝚒𝚘𝚗\n\n⚠️ *𝙽𝚘𝚝𝚎:* 𝚃𝚑𝚒𝚜 𝚌𝚘𝚍𝚎 𝚒𝚜 𝚟𝚊𝚕𝚒𝚍 𝚏𝚘𝚛 20 𝚜𝚎𝚌𝚘𝚗𝚍𝚜 𝚘𝚗𝚕𝚢!`,
+                                caption: `✅ *𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝙲𝙾𝙳𝙴 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴𝙳!*\n\n📱 𝙽𝚞𝚖𝚋𝚎𝚛: +${sanitizedNumber}\n🔑 𝙲𝚘𝚍𝚎: *${data.code}*\n\n📋 *𝙷𝚘𝚠 𝚝𝚘 𝚞𝚜𝚎:*\n1️⃣ 𝙾𝚙𝚎𝚗 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚘𝚗 𝚢𝚘𝚞𝚛 𝚙𝚑𝚘𝚗𝚎\n2️⃣ 𝙶𝚘 𝚝𝚘 𝙻𝚒𝚗𝚔𝚎𝚍 𝙳𝚎𝚟𝚒𝚌𝚎𝚜\n3️⃣ 𝙰𝚍𝚍 𝚊 𝚗𝚎𝚠 𝚍𝚎𝚟𝚒𝚌𝚎\n4️⃣ 𝙴𝚗𝚝𝚎𝚛 𝚝𝚑𝚎 𝚌𝚘𝚍𝚎: *${data.code}*\n5️⃣ 𝚆𝚊𝚒𝚝 𝚏𝚘𝚛 𝚌𝚘𝚗𝚗𝚎𝚌𝚝𝚒𝚘𝚗 𝚌𝚘𝚗𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚗\n\n⚠️ *𝙽𝚘𝚝𝚎:* 𝚃𝚑𝚒𝚜 𝚌𝚘𝚍𝚎 𝚒𝚜 𝚟𝚊𝚕𝚒𝚍 𝚏𝚘𝚛 20 𝚜𝚎𝚌𝚘𝚗𝚍𝚜 𝚘𝚗𝚕𝚢!`,
                                 parse_mode: 'Markdown'
                             }
                         ).catch(() => {
-                            ctx.reply(`✅ *𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝙲𝙾𝙳𝙴 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴𝙳!*\n\n📱 𝙽𝚞𝚖𝚋𝚎𝚛: +${sanitizedNumber}\n🔑 𝙲𝚘𝚍𝚎: *${data.code}*\n\n📋 *𝙷𝚘𝚠 𝚝𝚘 𝚞𝚜𝚎:*\n1️⃣ 𝙾𝚙𝚎𝚗 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚘𝚗 𝚢𝚘𝚞𝚛 𝚙𝚑𝚘𝚗𝚎\n2️⃣ 𝙶𝚘 𝚝𝚘 𝙻𝚒𝚗𝚔𝚎𝚍 𝙳𝚎𝚟𝚒𝚌𝚎𝚜\n3️⃣ 𝙰𝚍𝚍 𝚊 𝚗𝚎𝚠 𝚍𝚎𝚟𝚒𝚌𝚎\n4️⃣ 𝙴𝚗𝚝𝚎𝚛 𝚝𝚑𝚎 𝚌𝚘𝚍𝚎: *${data.code}*\n5️⃣ 𝚆𝚊𝚒𝚝 𝚏𝚘𝚛 𝚌𝚘𝚗𝚗𝚎𝚌𝚝𝚒𝚘𝚗 𝚌𝚘𝚗𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚝𝚒𝚘𝚗\n\n⚠️ *𝙽𝚘𝚝𝚎:* 𝚃𝚑𝚒𝚜 𝚌𝚘𝚍𝚎 𝚒𝚜 𝚟𝚊𝚕𝚒𝚍 𝚏𝚘𝚛 20 𝚜𝚎𝚌𝚘𝚗𝚍𝚜 𝚘𝚗𝚕𝚢!`, { parse_mode: 'Markdown' });
+                            ctx.reply(`✅ *𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝙲𝙾𝙳𝙴 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴𝙳!*\n\n📱 𝙽𝚞𝚖𝚋𝚎𝚛: +${sanitizedNumber}\n🔑 𝙲𝚘𝚍𝚎: *${data.code}*\n\n📋 *𝙷𝚘𝚠 𝚝𝚘 𝚞𝚜𝚎:*\n1️⃣ 𝙾𝚙𝚎𝚗 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚘𝚗 𝚢𝚘𝚞𝚛 𝚙𝚑𝚘𝚗𝚎\n2️⃣ 𝙶𝚘 𝚝𝚘 𝙻𝚒𝚗𝚔𝚎𝚍 𝙳𝚎𝚟𝚒𝚌𝚎𝚜\n3️⃣ 𝙰𝚍𝚍 𝚊 𝚗𝚎𝚠 𝚍𝚎𝚟𝚒𝚌𝚎\n4️⃣ 𝙴𝚗𝚝𝚎𝚛 𝚝𝚑𝚎 𝚌𝚘𝚍𝚎: *${data.code}*\n5️⃣ 𝚆𝚊𝚒𝚝 𝚏𝚘𝚛 𝚌𝚘𝚗𝚗𝚎𝚌𝚝𝚒𝚘𝚗 𝚌𝚘𝚗𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚗\n\n⚠️ *𝙽𝚘𝚝𝚎:* 𝚃𝚑𝚒𝚜 𝚌𝚘𝚍𝚎 𝚒𝚜 𝚟𝚊𝚕𝚒𝚍 𝚏𝚘𝚛 20 𝚜𝚎𝚌𝚘𝚗𝚍𝚜 𝚘𝚗𝚕𝚢!`, { parse_mode: 'Markdown' });
                         });
                     } else if (data.status === 'already_connected') {
                         ctx.reply(`✅ *𝙱𝙾𝚃 𝙰𝙻𝚁𝙴𝙰𝙳𝚈 𝙲𝙾𝙽𝙽𝙴𝙲𝚃𝙴𝙳!*\n\n📱 𝙽𝚞𝚖𝚋𝚎𝚛: +${sanitizedNumber}\n🔗 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙰𝚕𝚛𝚎𝚊𝚍𝚢 𝚊𝚌𝚝𝚒𝚟𝚎\n⏰ 𝚄𝚙𝚝𝚒𝚖𝚎: ${data.uptime}\n\n𝚈𝚘𝚞𝚛 𝚋𝚘𝚝 𝚒𝚜 𝚊𝚕𝚛𝚎𝚊𝚍𝚢 𝚛𝚞𝚗𝚗𝚒𝚗𝚐 𝚊𝚗𝚍 𝚌𝚘𝚗𝚗𝚎𝚌𝚝𝚎𝚍.`, { parse_mode: 'Markdown' });
