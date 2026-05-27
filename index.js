@@ -11,9 +11,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files for PWA
+// Serve static files FIRST
 app.use(express.static(__dirname));
-app.use('/icons', express.static(path.join(__dirname, 'icons')));
+app.use('/sila', express.static(path.join(__dirname, 'sila')));
 
 // Serve HTML files from root
 app.get('/', (req, res) => {
@@ -40,15 +40,21 @@ app.get('/settings', (req, res) => {
     res.sendFile(path.join(__dirname, 'sila', 'settings.html'));
 });
 
-// PWA manifest and service worker
+// PWA manifest
 app.get('/manifest.json', (req, res) => {
     res.sendFile(path.join(__dirname, 'manifest.json'));
 });
 
+// TEMPORARILY DISABLE service worker to avoid offline error
 app.get('/sw.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript');
     res.setHeader('Service-Worker-Allowed', '/');
-    res.sendFile(path.join(__dirname, 'sw.js'));
+    res.send(`
+        // Empty service worker - disabled temporarily to fix offline issues
+        self.addEventListener('install', () => {});
+        self.addEventListener('fetch', () => {});
+        self.addEventListener('activate', () => {});
+    `);
 });
 
 app.get('/offline.html', (req, res) => {
@@ -59,6 +65,20 @@ app.get('/offline.html', (req, res) => {
 const silaRouter = require('./sila');
 app.use('/', silaRouter);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
+// Test endpoint for config
+app.get('/test-api', (req, res) => {
+    res.json({ message: 'API is working!', success: true });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error('❌ Server Error:', err);
@@ -67,11 +87,15 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'offline.html'));
+    if (req.path.startsWith('/api/') || req.path === '/code' || req.path === '/status' || req.path === '/active') {
+        res.status(404).json({ error: 'API endpoint not found' });
+    } else {
+        res.status(404).sendFile(path.join(__dirname, 'offline.html'));
+    }
 });
 
 // Start server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
@@ -94,9 +118,9 @@ app.listen(port, () => {
 ║      📡 Server running on port: ${port}                      ║
 ║      🌐 Dashboard: http://localhost:${port}/dashboard       ║
 ║      🔗 Pair Device: http://localhost:${port}/pair          ║
+║      🧪 Test API: http://localhost:${port}/test-api         ║
 ║                                                              ║
 ║      👨‍💻 Developed By Sila Tech                             ║
-║      📦 GitHub: https://github.com/Sila-Md/SILA-MD         ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     `);
