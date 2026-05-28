@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>JAMALI MD | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:radial-gradient(circle at 10% 20%, #050b1a, #010105);font-family:'Inter',sans-serif;color:#fff;padding:20px}
-        .container{max-width:1200px;margin:0 auto}
+        body{background:radial-gradient(circle at 10% 20%,#050b1a,#010105);font-family:'Inter',sans-serif;color:#fff;padding:20px}
+        .container{max-width:1400px;margin:0 auto}
         .glass-card{background:rgba(12,15,30,0.6);backdrop-filter:blur(12px);border-radius:28px;border:1px solid rgba(0,246,255,0.2);padding:24px;margin-bottom:25px}
-        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:20px}
+        .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
         h1{font-size:1.8rem;background:linear-gradient(135deg,#fff,#00f6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .btn-group{display:flex;gap:12px;flex-wrap:wrap}
-        .btn-neon{background:linear-gradient(95deg,#00c6fb,#005bea);border:none;border-radius:60px;padding:12px 24px;font-weight:600;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:0.2s}
-        .btn-neon:hover{transform:scale(1.02);box-shadow:0 0 15px #00c6fb}
+        .btn-group{display:flex;gap:12px}
+        .btn-neon{background:linear-gradient(95deg,#00c6fb,#005bea);border:none;border-radius:60px;padding:12px 24px;font-weight:600;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
         .btn-outline{background:transparent;border:1px solid #00f6ff;color:#00f6ff}
-        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px}
+        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin:20px 0}
         .stat-card{background:#0f1222;border-radius:24px;padding:20px;text-align:center;border:1px solid #1f2330}
         .stat-value{font-size:2.5rem;color:#00f6ff;font-weight:700}
         table{width:100%;border-collapse:collapse}
@@ -25,109 +24,70 @@
         th{color:#00f6ff}
         .badge-online{background:#00ff8820;color:#0f0;padding:4px 12px;border-radius:40px}
         .disconnect-btn{background:transparent;border:1px solid #ff4444;color:#ff4444;border-radius:40px;padding:4px 12px;cursor:pointer}
-        .password-prompt{display:flex;gap:10px;margin-bottom:20px}
-        .password-prompt input{flex:1;background:#05080f;border:1px solid #2a2f50;border-radius:60px;padding:10px 15px;color:#fff}
-        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;padding:10px 20px;border-radius:40px;transition:0.3s;z-index:1000;border-left:4px solid #00f6ff}
-        .toast.show{transform:translateX(-50%) translateY(0)}
-        @media(max-width:600px){.stats{grid-template-columns:1fr}}
+        .footer{text-align:center;margin-top:40px;opacity:0.6}
+        @media(max-width:700px){.stats{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
 <div class="container">
     <div class="glass-card">
         <div class="header">
-            <h1><i class="fas fa-bolt"></i> JAMALI MD</h1>
+            <h1><i class="fas fa-bolt"></i> JAMALI MD • DASHBOARD</h1>
             <div class="btn-group">
-                <button class="btn-neon" onclick="location.href='/pair'"><i class="fas fa-link"></i> PAIR NEW DEVICE</button>
-                <button class="btn-neon btn-outline" onclick="location.href='/admin-panel'"><i class="fas fa-shield-alt"></i> ADMIN PANEL</button>
+                <button class="btn-neon" onclick="location.href='/pair'"><i class="fas fa-link"></i> PAIR DEVICE</button>
+                <button class="btn-neon btn-outline" onclick="location.href='/admin-panel'"><i class="fas fa-shield-alt"></i> ADMIN</button>
             </div>
         </div>
         <div class="stats" id="stats"></div>
     </div>
     <div class="glass-card">
-        <h3><i class="fas fa-server"></i> Your Active Bots</h3>
-        <div id="botsSection"></div>
+        <h3><i class="fas fa-server"></i> Active Bot Sessions (All)</h3>
+        <div id="sessionsList" style="overflow-x:auto; margin-top:15px"></div>
     </div>
+    <div class="footer">Powered by JAMALI TECH TZ | Multi‑server ready</div>
 </div>
-<div id="toast" class="toast"></div>
 
 <script>
-    const ADMIN_PASSWORD = "JAMALI2026"; // CHANGE THIS TO YOUR PASSWORD
-    let authenticated = false;
-
-    function showToast(msg, type='info'){
-        let t=document.getElementById('toast');
-        t.innerText=msg;
-        t.style.borderLeftColor=type==='error'?'#ff4444':'#00f6ff';
-        t.classList.add('show');
-        setTimeout(()=>t.classList.remove('show'),3000);
-    }
-
-    async function fetchSessions() {
-        try{
-            let res=await fetch('/active');
-            let data=await res.json();
-            return data.numbers || [];
-        } catch(e){ return []; }
-    }
-
-    async function loadStats() {
-        let sessions=await fetchSessions();
-        document.getElementById('stats').innerHTML = `
-            <div class="stat-card"><div class="stat-value">${sessions.length}</div><div>My Bots</div></div>
-            <div class="stat-card"><div class="stat-value">${sessions.length}</div><div>Active</div></div>
-        `;
-        return sessions;
-    }
-
-    async function loadBots() {
-        if(!authenticated){
-            let pass = prompt("🔐 Enter password to view active bots:");
-            if(pass !== ADMIN_PASSWORD){
-                showToast("Wrong password","error");
-                document.getElementById('botsSection').innerHTML = '<div style="text-align:center">🔒 Access denied. Contact admin.</div>';
-                return;
-            }
-            authenticated=true;
-        }
-        let sessions=await fetchSessions();
-        if(sessions.length===0){
-            document.getElementById('botsSection').innerHTML = '<div style="text-align:center">No active bots. Use Pair Device.</div>';
-            return;
-        }
-        let html = `<div style="overflow-x:auto"><table><thead><tr><th>Number</th><th>Status</th><th>Uptime</th><th>Action</th></tr></thead><tbody>`;
-        for(let num of sessions){
-            try{
-                let statusRes=await fetch(`/status?number=${num}`);
-                let statusData=await statusRes.json();
-                let uptime=(statusData.uptime||0)+'s';
+    async function fetchData() {
+        try {
+            const res = await fetch('/active');
+            const data = await res.json();
+            const sessions = data.numbers || [];
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card"><div class="stat-value">${sessions.length}</div><div>Total Bots</div></div>
+                <div class="stat-card"><div class="stat-value">${sessions.length}</div><div>Active</div></div>
+                <div class="stat-card"><div class="stat-value">${sessions.length > 0 ? '✅' : '⏳'}</div><div>Online</div></div>
+            `;
+            let html = `<table class="cyber-table"><thead><tr><th>#</th><th>Number</th><th>Status</th><th>Uptime</th><th>Action</th></tr></thead><tbody>`;
+            for (let i = 0; i < sessions.length; i++) {
+                const num = sessions[i];
+                let uptime = '--';
+                try {
+                    const sRes = await fetch(`/status?number=${num}`);
+                    const sData = await sRes.json();
+                    uptime = (sData.uptime || 0) + 's';
+                } catch(e) {}
                 html += `<tr>
+                            <td>${i+1}</td>
                             <td>${num}</td>
                             <td><span class="badge-online">● ONLINE</span></td>
                             <td>${uptime}</td>
                             <td><button class="disconnect-btn" onclick="disconnectBot('${num}')">Disconnect</button></td>
                          </tr>`;
-            } catch(e){}
-        }
-        html += `</tbody></table></div>`;
-        document.getElementById('botsSection').innerHTML = html;
+            }
+            if (sessions.length === 0) html += '<tr><td colspan="5">No active bots. Use Pair Device.</td></tr>';
+            html += `</tbody></table>`;
+            document.getElementById('sessionsList').innerHTML = html;
+        } catch(e) { console.error(e); }
     }
-
     window.disconnectBot = async (num) => {
         if(confirm(`Disconnect bot for ${num}?`)){
             await fetch(`/disconnect?number=${num}`);
-            showToast(`Bot ${num} disconnected`);
-            loadBots();
-            loadStats();
+            fetchData();
         }
     };
-
-    window.onload = async () => {
-        await loadStats();
-        // optionally, load bots without prompt? better to prompt when user wants to see
-        document.getElementById('botsSection').innerHTML = '<button class="btn-neon" id="showBotsBtn" style="margin-top:10px"><i class="fas fa-eye"></i> VIEW BOTS</button>';
-        document.getElementById('showBotsBtn').onclick = () => loadBots();
-    };
+    fetchData();
+    setInterval(fetchData, 10000);
 </script>
 </body>
 </html>
