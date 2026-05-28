@@ -1,4 +1,6 @@
 // silatech/antilink.js
+// JAMALI MD - Anti-Link Group Protection
+
 const fs = require('fs');
 const path = require('path');
 
