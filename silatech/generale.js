@@ -3,7 +3,7 @@ const config = require('../config');
 const os = require('os');
 
 // =================================================================
-// ⏱️ COMMANDE UPTIME
+// ⏱️ COMMAND UPTIME
 // =================================================================
 cmd({
     pattern: "uptime",
@@ -37,7 +37,7 @@ async(conn, mek, m, { from, reply, myquoted }) => {
         };
 
         // Final message
-        const uptimeMsg = `╭━━【 💀 𝚄𝙿𝚃𝙸𝙼𝙴 𝙸𝙽𝙵𝙾 】━━━━╮
+        const uptimeMsg = `╭━━【 ⚡ UPTIME INFO 】━━━━╮
 │ ⚡ response: *${latency} ms*
 │ ⏱️ uptime: *${uptime()}*
 │ 🖥️ platform: *${os.platform()}*
@@ -45,7 +45,7 @@ async(conn, mek, m, { from, reply, myquoted }) => {
 │ 📊 cpu: *${os.cpus().length} cores*
 ╰━━━━━━━━━━━━━━━━━━━━╯
 
-> © 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡`;
+> 🔥 Powered by JAMALI TECH TZ`;
 
         // Edit message
         await conn.sendMessage(from, { text: uptimeMsg, edit: msg.key });
@@ -57,7 +57,7 @@ async(conn, mek, m, { from, reply, myquoted }) => {
 
 
 // =================================================================
-// 👑 COMMANDE OWNER
+// 👑 COMMAND OWNER
 // =================================================================
 cmd({
     pattern: "owner",
@@ -66,18 +66,18 @@ cmd({
     react: "💀"
 },
 async(conn, mek, m, { from, myquoted }) => {
-    const ownerNumber = config.OWNER_NUMBER;
+    const ownerNumber = config.OWNER_NUMBER || "255784062158";
     
     const vcard = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
-                  'FN:sila tech (owner)\n' +
-                  'ORG:momy-kidy bot;\n' +
+                  'FN:JAMALI TECH TZ (owner)\n' +
+                  'ORG:JAMALI MD BOT;\n' +
                   `TEL;type=CELL;type=VOICE;waid=${ownerNumber}:${ownerNumber}\n` +
                   'END:VCARD';
 
     await conn.sendMessage(from, {
         contacts: {
-            displayName: 'sila tech',
+            displayName: 'JAMALI TECH TZ',
             contacts: [{ vcard }]
         }
     }, { quoted: myquoted });
