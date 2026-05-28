@@ -7,23 +7,23 @@ cmd({
     filename: __filename
 }, async (conn, mek, m, { from, reply, sender, pushname, myquoted }) => {
     try {
-        const response = `╭━━【 📱 𝚂𝙸𝙻𝙰 𝚃𝙴𝙲𝙷 】━━━╮
+        const response = `╭━━【 📱 JAMALI MD 】━━━╮
 │ 
-│ 🤖 *𝙱𝙾𝚃 𝙻𝙸𝙽𝙺:*
-│ https://momy-kidy-freebot.onrender.com
+│ 🤖 *BOT LINK:*
+│ https://github.com/jamalitechempire/jamali-bot
 │ 
-│ 📢 *𝙲𝙷𝙰𝙽𝙽𝙴𝙻:*
-│ https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02
+│ 📢 *CHANNEL:*
+│ https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h
 │ 
-│ 👑 *𝙾𝚆𝙽𝙴𝚁:*
-│ +255789661031
+│ 👑 *OWNER:*
+│ +255784062158
 │ 
-│ 💡 *𝙲𝙾𝙼𝙼𝙰𝙽𝙳𝚂:*
+│ 💡 *COMMANDS:*
 │ Type .menu for commands
 │ 
 ╰━━━━━━━━━━━━━━━━━━━╯
 
-> 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡`;
+> 🔥 Powered by JAMALI TECH TZ`;
 
         await conn.sendMessage(from, {
             text: response
