@@ -14,7 +14,7 @@ cmd({
 async(conn, mek, m, { from, q, reply, quoted, myquoted }) => {
     try {
         if (!q) {
-            return reply(`❌ 𝙿𝚕𝚎𝚊𝚜𝚎 𝚙𝚛𝚘𝚟𝚒𝚍𝚎 𝚊 𝚜𝚘𝚗𝚐 𝚗𝚊𝚖𝚎 𝚘𝚛 𝚈𝚘𝚞𝚃𝚞𝚋𝚎 𝚕𝚒𝚗𝚔\n\n𝙴𝚡𝚊𝚖𝚙𝚕𝚎: .𝚜𝚘𝚗𝚐𝟸 𝙻𝚘𝚟𝚎 𝚢𝚘𝚞𝚛𝚜𝚎𝚕𝚏\n𝙾𝚛: .𝚜𝚘𝚗𝚐𝟸 https://youtu.be/xyz`);
+            return reply(`❌ Please provide a song name or YouTube link\n\nExample: .song2 Love yourself\nOr: .song2 https://youtu.be/xyz`);
         }
 
         await conn.sendPresenceUpdate('composing', from);
@@ -41,7 +41,7 @@ async(conn, mek, m, { from, q, reply, quoted, myquoted }) => {
             // Search for the video
             const search = await yts(q);
             if (!search || !search.all || search.all.length === 0) {
-                return reply(`❌ 𝙽𝚘 𝚛𝚎𝚜𝚞𝚕𝚝𝚜 𝚏𝚘𝚞𝚗𝚍 𝚏𝚘𝚛 "${q}"`);
+                return reply(`❌ No results found for "${q}"`);
             }
             videoUrl = search.all[0].url;
             videoTitle = search.all[0].title;
@@ -66,7 +66,7 @@ async(conn, mek, m, { from, q, reply, quoted, myquoted }) => {
         if (thumbnail) {
             await conn.sendMessage(from, {
                 image: { url: thumbnail },
-                caption: `━━━━━━━━━━━━━━━━━━━━━━\n    𝚂𝙾𝙽𝙶 𝙸𝙽𝙵𝙾    \n━━━━━━━━━━━━━━━━━━━━━━\n\n🎵 *𝚃𝚒𝚝𝚕𝚎:* ${title}\n⏱️ *𝙳𝚞𝚛𝚊𝚝𝚒𝚘𝚗:* ${duration}\n━━━━━━━━━━━━━━━━━━━━━━\n⬇️ *𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍𝚒𝚗𝚐...*`
+                caption: `━━━━━━━━━━━━━━━━━━━━━━\n    JAMALI MD - SONG INFO    \n━━━━━━━━━━━━━━━━━━━━━━\n\n🎵 *Title:* ${title}\n⏱️ *Duration:* ${duration}\n━━━━━━━━━━━━━━━━━━━━━━\n⬇️ *Downloading...*`
             }, { quoted: myquoted });
         }
 
@@ -84,11 +84,11 @@ async(conn, mek, m, { from, q, reply, quoted, myquoted }) => {
 
     } catch (e) {
         console.error('Song2 Error:', e);
-        reply(`❌ 𝙴𝚛𝚛𝚘𝚛: ${e.message}`);
+        reply(`❌ Error: ${e.message}`);
     }
 });
 
-// ===================== FUNCTION VERSION (kama ulivyotuma) =====================
+// ===================== FUNCTION VERSION (kwa matumizi ya API moja kwa moja) =====================
 /*
 async function youtubeMp3(url, apikey) {
   try {
