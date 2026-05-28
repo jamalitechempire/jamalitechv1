@@ -20,14 +20,14 @@ async (conn, mek, m, { from, sender, args, reply }) => {
         if (args[0] === "inbox") {
             const data = tempMailStore[sender]
             if (!data) {
-                return reply("*❌ PEHLE `.tempmail` LIKHO AUR EMAIL BANAO*")
+                return reply("*❌ First create email using `.tempmail`*");
             }
 
             const url = `https://www.movanest.xyz/v2/tempmail/check?token=${data.token}`
             const res = await axios.get(url)
 
             if (!res.data.results || res.data.results.length === 0) {
-                return reply("*📭 ABHI KOI MESSAGE NAHI AYA*")
+                return reply("*📭 No messages yet*")
             }
 
             let msg = "*📬 INBOX MESSAGES*\n\n"
@@ -73,12 +73,12 @@ ${email}
 📥 Inbox check:
 .tempmail inbox
 
-⚠️ Token private hota hai
-👑 SILA-MD BOT`
+⚠️ Token is private
+🔥 JAMALI MD BOT`
         )
 
     } catch (e) {
         console.log("TEMPMAIL ERROR:", e)
-        reply("*❌ TEMPMAIL ERROR AYA 🥺*")
+        reply("*❌ TempMail error occurred*")
     }
 })
