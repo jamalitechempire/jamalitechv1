@@ -4,7 +4,7 @@ const yts = require('yt-search');
 
 const VIDEO_IMAGE = 'https://files.catbox.moe/36vahk.png';
 
-// Define combined fakevCard 
+// Define combined fakevCard (JAMALI MD)
 const fakevCard = {
   key: {
     fromMe: false,
@@ -13,15 +13,15 @@ const fakevCard = {
   },
   message: {
     contactMessage: {
-      displayName: "© 𝐒𝐈𝐋𝐀-𝐌𝐃",
-      vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:𝐒𝐈𝐋𝐀 𝐌𝐃 𝐁𝐎𝐓\nORG:𝐒𝐈𝐋𝐀-𝐌𝐃;\nTEL;type=CELL;type=VOICE;waid=255789661031:+255789661031\nEND:VCARD`
+      displayName: "© JAMALI MD",
+      vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:JAMALI MD BOT\nORG:JAMALI TECH TZ;\nTEL;type=CELL;type=VOICE;waid=255784062158:+255784062158\nEND:VCARD`
     }
   }
 };
 
 cmd({
     pattern: "video",
-    alias: ["ytmp4", "mp4", "ytv", "silavideo"],
+    alias: ["ytmp4", "mp4", "ytv", "jamalivideo"],
     desc: "Download videos from YouTube",
     category: "downloader",
     react: "🎥",
@@ -30,21 +30,21 @@ cmd({
 async (conn, mek, m, { from, sender, reply, q }) => {
     try {
         if (!q) {
-            return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚅𝙸𝙳𝙴𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳𝙴𝚁 ━━━━━━━━━
-┃ 🎥 𝙳𝙾 𝚈𝙾𝚄 𝚆𝙰𝙽𝚃 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳 𝚅𝙸𝙳𝙴𝙾 🥺
+            return reply(`┏━❑ JAMALI MD VIDEO DOWNLOADER ━━━━━━━━━
+┃ 🎥 DO YOU WANT TO DOWNLOAD VIDEO 🥺
 ┃
-┃ 𝚃𝚈𝙿𝙴: .𝚟𝚒𝚍𝚎𝚘 𝚈𝙾𝚄𝚁 𝚅𝙸𝙳𝙴𝙾 𝙽𝙰𝙼𝙴
+┃ TYPE: .video YOUR VIDEO NAME
 ┃
-┃ 𝙴𝚡𝚊𝚖𝚙𝚕𝚎:
-┃ .𝚟𝚒𝚍𝚎𝚘 𝙲𝚛𝚒𝚜𝚝𝚒𝚊𝚗𝚘 𝚁𝚘𝚗𝚊𝚕𝚍𝚘 𝙶𝚘𝚊𝚕
+┃ Example:
+┃ .video Cristiano Ronaldo Goal
 ┗━━━━━━━━━━━━━━━━━━━━`);
         }
 
         const search = await yts(q);
         if (!search.videos.length) {
-            return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚅𝙸𝙳𝙴𝙾 𝚂𝙴𝙰𝚁𝙲𝙷 ━━━━━━━━━
-┃ ❌ 𝙲𝚊𝚗'𝚝 𝙵𝚒𝚗𝚍 𝙰𝚗𝚢 𝚅𝚒𝚍𝚎𝚘
-┃ 😭 𝚂𝙾𝚁𝚁𝚈 🥺❤️
+            return reply(`┏━❑ JAMALI MD VIDEO SEARCH ━━━━━━━━━
+┃ ❌ Can't Find Any Video
+┃ 😭 SORRY 🥺❤️
 ┗━━━━━━━━━━━━━━━━━━━━`);
         }
 
@@ -55,24 +55,24 @@ async (conn, mek, m, { from, sender, reply, q }) => {
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.status || !apiRes.result?.media?.video_url) {
-            return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚅𝙸𝙳𝙴𝙾 𝙴𝚁𝚁𝙾𝚁 ━━━━━━━━━
-┃ ❌ 𝚅𝚒𝚍𝚎𝚘 𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝙵𝚊𝚒𝚕𝚎𝚍
-┃ 🥺 𝙿𝚕𝚎𝚊𝚜𝚎 𝚃𝚛𝚢 𝙰𝚐𝚊𝚒𝚗 ☺️
+            return reply(`┏━❑ JAMALI MD VIDEO ERROR ━━━━━━━━━
+┃ ❌ Video Download Failed
+┃ 🥺 Please Try Again ☺️
 ┗━━━━━━━━━━━━━━━━━━━━`);
         }
 
         const result = apiRes.result.media;
-        const caption = `┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚅𝙸𝙳𝙴𝙾 𝙿𝙻𝙰𝚈𝙴𝚁 ━━━━━━━━━
-┃ 🎬 𝚃𝚒𝚝𝚕𝚎: ${data.title}
+        const caption = `┏━❑ JAMALI MD VIDEO PLAYER ━━━━━━━━━
+┃ 🎬 Title: ${data.title}
 ┃
-┃ 🔗 𝙻𝚒𝚗𝚔: ${data.url}
-┃ 👀 𝚅𝙸𝙴𝚆𝚂: ${data.views}
-┃ ⏱️ 𝚃𝙸𝙼𝙴: ${data.timestamp}
+┃ 🔗 Link: ${data.url}
+┃ 👀 Views: ${data.views}
+┃ ⏱️ Time: ${data.timestamp}
 ┃
-┃ 📝 𝙲𝙷𝙾𝙾𝚂𝙴 𝚈𝙾𝚄𝚁 𝚅𝙴𝚁𝚂𝙸𝙾𝙽:
+┃ 📝 CHOOSE YOUR VERSION:
 ┃ 
-┃ ❮1❯ 𝚂𝙸𝙼𝙿𝙻𝙴 𝚅𝙸𝙳𝙴𝙾
-┃ ❮2❯ 𝙵𝙸𝙻𝙴 𝚅𝙸𝙳𝙴𝙾
+┃ ❮1❯ SIMPLE VIDEO
+┃ ❮2❯ FILE VIDEO
 ┗━━━━━━━━━━━━━━━━━━━━`;
 
         const sentMsg = await conn.sendMessage(from, { 
@@ -102,7 +102,7 @@ async (conn, mek, m, { from, sender, reply, q }) => {
                         await conn.sendMessage(senderID, { 
                             video: { url: result.video_url }, 
                             mimetype: "video/mp4",
-                            caption: `*Video: ${data.title}*\n\n*Downloaded by SILA-MD*`
+                            caption: `*Video: ${data.title}*\n\n*Downloaded by JAMALI MD*`
                         }, { quoted: fakevCard });
                     } else if (choice === "2") {
                         // Send as document
@@ -110,20 +110,20 @@ async (conn, mek, m, { from, sender, reply, q }) => {
                             document: { url: result.video_url }, 
                             mimetype: "video/mp4", 
                             fileName: `${data.title}.mp4`,
-                            caption: `*Video: ${data.title}*\n\n*Downloaded by SILA-MD*`
+                            caption: `*Video: ${data.title}*\n\n*Downloaded by JAMALI MD*`
                         }, { quoted: fakevCard });
                     } else {
                         await conn.sendMessage(senderID, { 
-                            text: `┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚂𝙴𝙻𝙴𝙲𝚃𝙸𝙾𝙽 ━━━━━━━━━
-┃ ❌ 𝙿𝚕𝚎𝚊𝚜𝚎 𝚁𝚎𝚙𝚕𝚢 𝚆𝙸𝚃𝙷 ❮1❯ 𝚘𝚛 ❮2❯
+                            text: `┏━❑ JAMALI MD SELECTION ━━━━━━━━━
+┃ ❌ Please Reply With ❮1❯ or ❮2❯
 ┗━━━━━━━━━━━━━━━━━━━━` 
                         }, { quoted: fakevCard });
                     }
                 } catch (err) {
                     console.error("Video send error:", err.message);
                     await conn.sendMessage(senderID, { 
-                        text: `┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚂𝙴𝙽𝙳 𝙴𝚁𝚁𝙾𝚁 ━━━━━━━━━
-┃ ❌ 𝙵𝚊𝚒𝚕𝚎𝚍 𝚝𝚘 𝚜𝚎𝚗𝚍 𝚟𝚒𝚍𝚎𝚘 📹
+                        text: `┏━❑ JAMALI MD SEND ERROR ━━━━━━━━━
+┃ ❌ Failed to send video 📹
 ┗━━━━━━━━━━━━━━━━━━━━` 
                     }, { quoted: fakevCard });
                 }
@@ -143,8 +143,8 @@ async (conn, mek, m, { from, sender, reply, q }) => {
 
     } catch (error) {
         console.error('Video Error:', error.message);
-        reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳 𝙵𝙰𝙸𝙻𝙴𝙳 ━━━━━━━━━
-┃ 😔 𝚅𝚒𝚍𝚎𝚘 𝚍𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚏𝚊𝚒𝚕𝚎𝚍!
+        reply(`┏━❑ JAMALI MD DOWNLOAD FAILED ━━━━━━━━━
+┃ 😔 Video download failed!
 ┗━━━━━━━━━━━━━━━━━━━━`);
     }
 });
