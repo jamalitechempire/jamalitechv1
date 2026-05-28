@@ -2,444 +2,445 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JAMALI MD | SECURE PAIR</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Jamali Tech MD | Pair Code System</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
-            background: radial-gradient(circle at 10% 20%, #050b1a, #010105);
-            font-family: 'Inter', sans-serif;
-            color: #fff;
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Inter', sans-serif;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            position: relative;
         }
 
-        /* animated background grid */
-        .cyber-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 246, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 246, 255, 0.08) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -2;
-        }
-        .cyber-grid::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 246, 255, 0.1), transparent 70%);
-            animation: pulseGlow 6s infinite alternate;
-        }
-        @keyframes pulseGlow {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.8; }
-        }
-
-        .container {
+        /* Glassmorphism card */
+        .md-card {
             max-width: 550px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* glass card */
-        .glass-card {
-            background: rgba(12, 15, 30, 0.55);
+            width: 100%;
+            background: rgba(8, 18, 28, 0.75);
             backdrop-filter: blur(14px);
-            border-radius: 32px;
-            border: 1px solid rgba(0, 246, 255, 0.3);
-            padding: 28px 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
-            transition: 0.2s;
-        }
-        .glass-card:hover {
-            border-color: #00f6ff;
-            box-shadow: 0 0 20px rgba(0, 246, 255, 0.2);
+            border-radius: 3rem;
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo i {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #00f6ff, #b400ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        h1 {
-            font-size: 1.9rem;
-            font-weight: 700;
-            text-align: center;
-            background: linear-gradient(135deg, #fff, #00f6ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-        }
-
-        /* info row */
-        .info-panel {
-            background: #0a0d1a;
-            border-radius: 24px;
-            padding: 14px 18px;
-            margin: 20px 0;
-        }
-        .info-row {
+        /* Header section */
+        .header {
+            padding: 1.2rem 1.8rem 0.8rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin: 8px 0;
-            font-size: 0.9rem;
-        }
-        .info-row a {
-            color: #0f0;
-            text-decoration: none;
-        }
-        .info-row i {
-            width: 28px;
-            color: #00f6ff;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 15px 0;
-            font-size: 0.85rem;
-        }
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: #0f0;
-            border-radius: 50%;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        input {
-            width: 100%;
-            background: #05080f;
-            border: 1px solid #2a2f50;
-            border-radius: 60px;
-            padding: 14px 20px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            margin: 10px 0;
-        }
-        input:focus {
-            border-color: #00f6ff;
-            box-shadow: 0 0 10px #00f6ff;
-        }
-
-        .btn {
-            background: linear-gradient(95deg, #00c6fb, #005bea);
-            border: none;
-            border-radius: 60px;
-            padding: 14px 20px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-        .btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px #00c6fb;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #00f6ff;
-            color: #00f6ff;
-            margin-top: 12px;
-        }
-
-        .code-box {
-            background: #000000aa;
-            border-radius: 28px;
-            padding: 18px;
-            text-align: center;
-            border: 1px solid #b400ff;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        .code-digits {
-            font-size: 1.8rem;
-            letter-spacing: 6px;
-            font-weight: 800;
-            color: #b400ff;
-            font-family: monospace;
-        }
-
-        /* active bots section (hidden initially) */
-        .bots-section {
-            margin-top: 25px;
-            display: none;
-        }
-        .bots-card {
-            background: #0a0d1ae0;
-            border-radius: 28px;
-            padding: 20px;
-            border: 1px solid #00f6ff30;
-        }
-        .bot-item {
-            background: #05080f;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: baseline;
             flex-wrap: wrap;
         }
-        .bot-number {
-            font-family: monospace;
-            font-weight: 600;
+        .title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #0ff, #6efff0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
         }
-        .bot-status {
-            color: #0f0;
-            font-size: 0.8rem;
-        }
-        .disconnect-btn {
-            background: none;
-            border: 1px solid #ff4444;
-            color: #ff4444;
-            border-radius: 40px;
-            padding: 4px 12px;
-            cursor: pointer;
-            font-size: 0.7rem;
-        }
-        .password-prompt {
+        .lang-switch {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            background: #0a1422;
+            padding: 5px 12px;
+            border-radius: 60px;
+            border: 0.5px solid #2c5f7a;
         }
-        .password-prompt input {
-            flex: 1;
-            margin: 0;
+        .lang-btn {
+            background: transparent;
+            border: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #8a9fc0;
+            transition: 0.2s;
+            padding: 4px 10px;
+            border-radius: 40px;
         }
-        .footer {
-            text-align: center;
-            font-size: 0.7rem;
-            margin-top: 20px;
-            opacity: 0.5;
+        .lang-btn.active {
+            background: #00ccff30;
+            color: #0ff;
+            text-shadow: 0 0 3px cyan;
+            border: 0.5px solid cyan;
         }
 
-        .toast {
+        /* Main content */
+        .content {
+            padding: 1.8rem 1.8rem 2rem;
+        }
+
+        .pair-headline {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #7f9fbf;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .pair-code-box {
+            background: #010a18e0;
+            border-radius: 2rem;
+            padding: 1rem;
+            text-align: center;
+            margin: 1rem 0 1.5rem;
+            border: 1px solid #0ff33a50;
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+        }
+
+        .pair-label {
+            font-size: 0.7rem;
+            color: #8ab3cf;
+            letter-spacing: 1px;
+        }
+
+        .pair-code {
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #eef5ff, #0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            word-break: break-all;
+            letter-spacing: 2px;
+        }
+
+        /* input field */
+        .input-group {
+            margin: 1.5rem 0 1rem;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #b0d4ff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .phone-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #0a1322;
+            border-radius: 60px;
+            padding: 5px 5px 5px 20px;
+            border: 1px solid #2a4c6e;
+            transition: 0.2s;
+        }
+        .phone-input-wrapper:focus-within {
+            border-color: #0ff;
+            box-shadow: 0 0 8px cyan;
+        }
+        .phone-input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 0;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        .generate-btn {
+            background: linear-gradient(95deg, #0c5f7a, #0aa);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 10px rgba(0, 180, 200, 0.3);
+        }
+        .generate-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* bottom button row (alive, bot, user, music etc) */
+        .action-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 30px 0 20px;
+        }
+        .feature-btn {
+            background: rgba(0, 20, 40, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid #2c6f8f;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #bbf0ff;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .feature-btn:active {
+            background: #0ff22a20;
+            transform: scale(0.95);
+            color: white;
+            border-color: cyan;
+        }
+        .special {
+            background: #0d3f55;
+            border-color: cyan;
+            color: white;
+        }
+
+        .footer {
+            background: #020a12aa;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #3e6d8c;
+            border-top: 1px solid #0a2a3a;
+        }
+
+        .toast-msg {
             position: fixed;
             bottom: 30px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #111;
-            padding: 10px 20px;
-            border-radius: 40px;
-            transition: 0.3s;
-            z-index: 1000;
-            border-left: 4px solid #00f6ff;
+            transform: translateX(-50%);
+            background: #0a1f2fdd;
+            backdrop-filter: blur(12px);
+            padding: 10px 24px;
+            border-radius: 60px;
+            color: cyan;
+            font-size: 0.8rem;
+            border: 1px solid cyan;
+            pointer-events: none;
+            z-index: 999;
+            transition: 0.2s;
+            opacity: 0;
         }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+        .toast-msg.show {
+            opacity: 1;
         }
-
-        @media (max-width: 500px) {
-            .glass-card {
-                padding: 20px;
-            }
-            .code-digits {
-                font-size: 1.3rem;
-                letter-spacing: 4px;
-            }
+        @media (max-width: 480px) {
+            .pair-code { font-size: 1.8rem; }
+            .action-grid { gap: 8px; }
+            .feature-btn { padding: 6px 12px; font-size: 0.7rem; }
+        }
+        hr {
+            border-color: #1a4058;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-<div class="cyber-grid"></div>
-<div class="container">
-    <div class="glass-card">
-        <div class="logo"><i class="fas fa-bolt"></i></div>
-        <h1>⚡ JAMALI MD</h1>
-        <div class="info-panel">
-            <div class="info-row">
-                <span><i class="fas fa-crown"></i> OWNER</span>
-                <span><strong>JAMALI TECH TZ</strong> <i class="fab fa-whatsapp"></i> <a href="https://wa.me/255784062158">+255 784 062 158</a></span>
-            </div>
-            <div class="info-row">
-                <span><i class="fas fa-hashtag"></i> CHANNEL</span>
-                <span><a href="https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h" target="_blank">Join Official Channel →</a></span>
-            </div>
-        </div>
-        <div class="status"><div class="dot"></div><span>SYSTEM READY</span></div>
-        
-        <input type="tel" id="phoneNumber" placeholder="Enter number with country code (e.g., 255784062158)" value="255">
-        <button class="btn" id="genPairBtn"><i class="fas fa-key"></i> GENERATE PAIRING CODE</button>
-        
-        <div class="code-box" id="codeBox">
-            <div class="code-digits" id="pairCodeDisplay">—— —— ——</div>
-            <div style="font-size:0.7rem; margin-top:6px"><i class="fas fa-copy"></i> tap to copy</div>
-        </div>
-        
-        <button class="btn btn-outline" id="viewBotsBtn"><i class="fas fa-eye"></i> VIEW ACTIVE BOTS (ADMIN)</button>
-        
-        <div id="botsContainer" class="bots-section">
-            <div class="bots-card">
-                <div id="botsList"></div>
-            </div>
+
+<div class="md-card">
+    <div class="header">
+        <span class="title">⚡ JAMALI TECH MD</span>
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="sw">SW</button>
         </div>
     </div>
-    <div class="footer">🔒 Secure pairing • Powered by JAMALI TECH TZ</div>
+
+    <div class="content">
+        <div class="pair-headline" id="pairHeadline">🔐 PAIR CODE SYSTEM</div>
+
+        <!-- Pairing code display (JAMALITZ) -->
+        <div class="pair-code-box">
+            <div class="pair-label">📲 PAIRING CODE</div>
+            <div class="pair-code" id="pairingCodeDisplay">JAMALITZ</div>
+            <div style="font-size: 0.7rem; margin-top: 6px; color: #5f9fbf;">⚡ Device Sync Ready</div>
+        </div>
+
+        <!-- WhatsApp Number + Generate -->
+        <div class="input-group">
+            <label id="phoneLabel">📞 WhatsApp Number</label>
+            <div class="phone-input-wrapper">
+                <input type="tel" id="whatsappNumber" placeholder="e.g., 255712345678" value="">
+                <button class="generate-btn" id="generateBtn">GENERATE</button>
+            </div>
+        </div>
+
+        <!-- Action buttons row: Alive, Bot, User, Music ON/OFF, Overlay, CT Owner -->
+        <div class="action-grid">
+            <button class="feature-btn" data-action="alive">💚 ALIVE</button>
+            <button class="feature-btn" data-action="bot">🤖 BOT</button>
+            <button class="feature-btn" data-action="user">👤 USER</button>
+            <button class="feature-btn" data-action="music">🎵 MUSIC ON/OFF</button>
+            <button class="feature-btn" data-action="overlay">🖼️ OVERLAY</button>
+            <button class="feature-btn special" data-action="ctowner">👑 CT OWNER</button>
+        </div>
+
+        <!-- subtle info -->
+        <hr>
+        <div style="text-align: center; font-size: 0.7rem; color:#4d799b; margin-top: 12px;">
+            JAMALI TECH MD • PREMIUM FRAMEWORK
+        </div>
+    </div>
+    <div class="footer">
+        © 2026 JAMALI TECH EMPIRE | v2.0 PRO | 24/7 Active
+    </div>
 </div>
-<div id="toast" class="toast"></div>
+
+<div id="toastMsg" class="toast-msg">✨ Pairing code ready</div>
 
 <script>
-    // ===================== CONFIG =====================
-    const ADMIN_PASSWORD = "JAMALI2026"; // change this to your desired password
-    let botsData = [];
+    // Language dictionary
+    const translations = {
+        en: {
+            headline: "🔐 PAIR CODE SYSTEM",
+            phoneLabel: "📞 WhatsApp Number",
+            generate: "GENERATE",
+            pairCodeLabel: "PAIRING CODE",
+            toastPair: "✅ Pairing code JAMALITZ is active!",
+            toastGenerate: "🔁 Pairing request sent! Use code JAMALITZ",
+            aliveMsg: "🤖 BOT is alive and running smoothly",
+            botMsg: "⚙️ Bot commands activated",
+            userMsg: "👤 User profile synced",
+            musicMsg: "🎵 Music mode toggled",
+            overlayMsg: "🖼️ Overlay UI triggered",
+            ctOwnerMsg: "👑 Contacting CT Owner..."
+        },
+        sw: {
+            headline: "🔐 MFUMO WA PAIR CODE",
+            phoneLabel: "📞 Namba ya WhatsApp",
+            generate: "ZALISHA",
+            pairCodeLabel: "CODE YA KUOANISHA",
+            toastPair: "✅ Code ya kuoanisha JAMALITZ iko tayari!",
+            toastGenerate: "🔁 Ombi la kuoanisha limetumwa! Tumia code JAMALITZ",
+            aliveMsg: "🤖 Bot iko hai na inafanya kazi vizuri",
+            botMsg: "⚙️ Amri za bot zimewashwa",
+            userMsg: "👤 Profaili ya mtumiaji imelandanishwa",
+            musicMsg: "🎵 Hali ya muziki imebadilishwa",
+            overlayMsg: "🖼️ Overlay imeamilishwa",
+            ctOwnerMsg: "👑 Inawasiliana na Mmiliki wa CT..."
+        }
+    };
 
-    function showToast(msg, type = 'info') {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.style.borderLeftColor = type === 'error' ? '#ff4444' : '#00f6ff';
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
+    let currentLang = 'en';
+
+    // DOM elements
+    const headlineEl = document.getElementById('pairHeadline');
+    const phoneLabelEl = document.getElementById('phoneLabel');
+    const generateBtnText = document.getElementById('generateBtn');
+    const pairingCodeSpan = document.getElementById('pairingCodeDisplay');
+    const toastDiv = document.getElementById('toastMsg');
+
+    function showToast(message, duration = 2500) {
+        toastDiv.textContent = message;
+        toastDiv.classList.add('show');
+        setTimeout(() => {
+            toastDiv.classList.remove('show');
+        }, duration);
     }
 
-    // ===================== PAIRING CODE =====================
-    async function generateCode() {
-        let number = document.getElementById('phoneNumber').value.replace(/\D/g, '');
-        if (number.length < 9) {
-            showToast('Invalid number (use country code)', 'error');
+    function updateLanguage() {
+        const t = translations[currentLang];
+        headlineEl.textContent = t.headline;
+        phoneLabelEl.textContent = t.phoneLabel;
+        generateBtnText.textContent = t.generate;
+        // pairing code label is inside pair-code-box, but we can update dynamic text if needed
+        const pairLabelSpan = document.querySelector('.pair-label');
+        if (pairLabelSpan && currentLang === 'sw') {
+            pairLabelSpan.innerHTML = "📲 CODE YA KUOANISHA";
+        } else if (pairLabelSpan) {
+            pairLabelSpan.innerHTML = "📲 PAIRING CODE";
+        }
+        // small extra: keep pairing code display unchanged (JAMALITZ)
+    }
+
+    // Language switcher
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLang = btn.getAttribute('data-lang');
+            updateLanguage();
+            showToast(currentLang === 'en' ? "🌐 Language: English" : "🌐 Lugha: Kiswahili", 1200);
+        });
+    });
+
+    // GENERATE pairing code action – static code "JAMALITZ" but we mimic backend pairing
+    const generateBtn = document.getElementById('generateBtn');
+    const phoneInput = document.getElementById('whatsappNumber');
+
+    function simulatePairing() {
+        let phone = phoneInput.value.trim();
+        if (!phone) {
+            showToast(currentLang === 'en' ? "⚠️ Please enter WhatsApp number" : "⚠️ Tafadhali ingiza namba ya WhatsApp", 2000);
             return;
         }
-        const btn = document.getElementById('genPairBtn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> PROCESSING...';
-        btn.disabled = true;
-        const codeDiv = document.getElementById('pairCodeDisplay');
-        codeDiv.innerText = '⏳';
-        try {
-            const res = await fetch(`/code?number=${number}`);
-            const data = await res.json();
-            if (data.code) {
-                codeDiv.innerText = data.code;
-                showToast('✅ Pairing code generated!');
-            } else if (data.status === 'already_connected') {
-                codeDiv.innerText = 'ALREADY ACTIVE';
-                showToast('Bot already connected for this number', 'error');
-            } else {
-                codeDiv.innerText = 'FAILED';
-                showToast('Failed to generate code', 'error');
-            }
-        } catch (err) {
-            codeDiv.innerText = 'ERROR';
-            showToast('Server error', 'error');
+        // basic validation
+        const cleanPhone = phone.replace(/\D/g, '');
+        if (cleanPhone.length < 9) {
+            showToast(currentLang === 'en' ? "❌ Invalid number" : "❌ Namba si sahihi", 2000);
+            return;
         }
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+        // pairing code remains JAMALITZ as requested
+        pairingCodeSpan.innerText = "JAMALITZ";
+        // extra effect: show toast based on language
+        const t = translations[currentLang];
+        showToast(t.toastGenerate || "Pairing code JAMALITZ is ready! Use it on WhatsApp.", 2800);
+        // also optionally send a simulated alert
+        console.log(`[PAIRING] phone: ${phone}, code: JAMALITZ`);
+        // you can also trigger a custom event if you integrate later with real backend
     }
 
-    document.getElementById('genPairBtn').onclick = generateCode;
-    document.getElementById('codeBox').onclick = () => {
-        let code = document.getElementById('pairCodeDisplay').innerText;
-        if (code && !['—— —— ——', 'FAILED', 'ERROR', 'ALREADY ACTIVE', '⏳'].includes(code)) {
-            navigator.clipboard.writeText(code);
-            showToast('Code copied!');
-        } else {
-            showToast('No valid code to copy', 'error');
-        }
+    generateBtn.addEventListener('click', simulatePairing);
+    // pressing enter on input also triggers
+    phoneInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') simulatePairing();
+    });
+
+    // Action buttons features (ALIVE, BOT, USER, MUSIC ON/OFF, OVERLAY, CT OWNER)
+    const actionMap = {
+        alive: () => showToast(translations[currentLang].aliveMsg, 2000),
+        bot: () => showToast(translations[currentLang].botMsg, 2000),
+        user: () => showToast(translations[currentLang].userMsg, 2000),
+        music: () => showToast(translations[currentLang].musicMsg, 2000),
+        overlay: () => showToast(translations[currentLang].overlayMsg, 2000),
+        ctowner: () => showToast(translations[currentLang].ctOwnerMsg, 2000)
     };
 
-    // ===================== ACTIVE BOTS (PASSWORD PROTECTED) =====================
-    let botsVisible = false;
-    let passwordAuthenticated = false;
-
-    async function fetchActiveBots() {
-        try {
-            const res = await fetch('/active');
-            const data = await res.json();
-            const numbers = data.numbers || [];
-            if (numbers.length === 0) {
-                document.getElementById('botsList').innerHTML = '<div style="text-align:center">No active bots connected.</div>';
-                return;
-            }
-            let html = '';
-            for (let num of numbers) {
-                try {
-                    const statusRes = await fetch(`/status?number=${num}`);
-                    const statusData = await statusRes.json();
-                    const uptime = (statusData.uptime || 0) + 's';
-                    html += `
-                        <div class="bot-item">
-                            <div><span class="bot-number">${num}</span><br><span class="bot-status">● ONLINE · ${uptime}</span></div>
-                            <button class="disconnect-btn" onclick="disconnectBot('${num}')">Disconnect</button>
-                        </div>
-                    `;
-                } catch(e) {}
-            }
-            document.getElementById('botsList').innerHTML = html || '<div>Error loading bots</div>';
-        } catch(e) {
-            document.getElementById('botsList').innerHTML = '<div>Failed to fetch active bots.</div>';
-        }
-    }
-
-    async function disconnectBot(number) {
-        if (confirm(`⚠️ Disconnect bot for ${number}? This will remove the session.`)) {
-            try {
-                await fetch(`/disconnect?number=${number}`);
-                showToast(`Bot ${number} disconnected`);
-                await fetchActiveBots(); // refresh
-            } catch(e) {
-                showToast('Error disconnecting', 'error');
-            }
-        }
-    }
-
-    const viewBtn = document.getElementById('viewBotsBtn');
-    const botsContainer = document.getElementById('botsContainer');
-
-    viewBtn.onclick = () => {
-        if (!passwordAuthenticated) {
-            const pass = prompt("🔐 Enter admin password to view active bots:");
-            if (pass === ADMIN_PASSWORD) {
-                passwordAuthenticated = true;
-                botsContainer.style.display = 'block';
-                fetchActiveBots();
+    document.querySelectorAll('.feature-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const action = btn.getAttribute('data-action');
+            if (action && actionMap[action]) {
+                actionMap[action]();
+                // extra haptic / animation
+                btn.style.transform = "scale(0.95)";
+                setTimeout(() => { btn.style.transform = ""; }, 150);
             } else {
-                showToast('Incorrect password', 'error');
+                showToast("✨ Feature coming soon", 1200);
             }
-        } else {
-            // already authenticated, just toggle visibility
-            if (botsContainer.style.display === 'none' || botsContainer.style.display === '') {
-                botsContainer.style.display = 'block';
-                fetchActiveBots();
-            } else {
-                botsContainer.style.display = 'none';
-            }
-        }
-    };
+        });
+    });
+
+    // Initial pairing code display force JAMALITZ always
+    pairingCodeSpan.innerText = "JAMALITZ";
+
+    // Also the QR code / Pairing style is similar to image: we show "JAMALITZ"
+    // In case you want dynamic generation based on phone number we keep core "JAMALITZ"
+    // Option to mimic "JAMALITZ" + last digits but not needed, but user wants exactly JAMALITZ
+
+    // Add micro interaction: when page loads, show pairing ready
+    window.addEventListener('load', () => {
+        updateLanguage();
+        showToast(currentLang === 'en' ? "✅ Pairing system ready • Code: JAMALITZ" : "✅ Mfumo wa kuoanisha uko tayari • Msimbo: JAMALITZ", 2000);
+    });
 </script>
 </body>
 </html>
