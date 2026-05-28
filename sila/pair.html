@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JAMALI MD | SECURE PAIR</title>
+    <title>JAMALI TECH MD | PAIR SYSTEM</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -18,28 +18,27 @@
             font-family: 'Inter', sans-serif;
             color: #fff;
             min-height: 100vh;
-            padding: 20px;
             position: relative;
+            overflow-x: hidden;
         }
 
-        .cyber-grid {
+        /* Animated cyber background */
+        .cyber-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 246, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 246, 255, 0.08) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: repeating-linear-gradient(0deg, rgba(0, 246, 255, 0.05) 0px, rgba(0, 246, 255, 0.05) 1px, transparent 1px, transparent 6px),
+                              repeating-linear-gradient(90deg, rgba(0, 246, 255, 0.05) 0px, rgba(0, 246, 255, 0.05) 1px, transparent 1px, transparent 6px);
             z-index: -2;
         }
-        .cyber-grid::before {
+        .cyber-bg::before {
             content: '';
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 246, 255, 0.1), transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(0, 246, 255, 0.15), transparent 70%);
             animation: pulseGlow 6s infinite alternate;
         }
         @keyframes pulseGlow {
@@ -48,20 +47,55 @@
         }
 
         .container {
-            max-width: 550px;
+            max-width: 1300px;
             margin: 0 auto;
+            padding: 30px 20px;
             position: relative;
             z-index: 2;
         }
 
+        /* header with language toggle */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+        .lang-switch {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 6px 12px;
+            border: 1px solid rgba(0, 246, 255, 0.4);
+        }
+        .lang-switch span {
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .lang-switch span.active {
+            background: linear-gradient(95deg, #00c6fb, #005bea);
+            color: #fff;
+        }
+        .lang-switch span:not(.active) {
+            color: #aaa;
+        }
+
+        /* main grid */
+        .pair-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* glass cards */
         .glass-card {
             background: rgba(12, 15, 30, 0.55);
             backdrop-filter: blur(14px);
-            border-radius: 32px;
+            border-radius: 28px;
             border: 1px solid rgba(0, 246, 255, 0.3);
-            padding: 28px 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+            padding: 24px;
             transition: 0.2s;
         }
         .glass-card:hover {
@@ -69,71 +103,46 @@
             box-shadow: 0 0 20px rgba(0, 246, 255, 0.2);
         }
 
-        .logo {
-            text-align: center;
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00f6ff;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #00f6ff30;
+            padding-bottom: 12px;
         }
-        .logo i {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #00f6ff, #b400ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .qr-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 180px;
+            background: #00000055;
+            border-radius: 20px;
+            border: 1px dashed #00f6ff;
         }
-        h1 {
-            font-size: 1.9rem;
+        .qr-code {
+            text-align: center;
+        }
+        .code-display {
+            background: #000000aa;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
             font-weight: 700;
-            text-align: center;
-            background: linear-gradient(135deg, #fff, #00f6ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
+            color: #b400ff;
+            font-family: monospace;
+            margin: 15px 0;
+            cursor: pointer;
         }
-
-        .info-panel {
-            background: #0a0d1a;
-            border-radius: 24px;
-            padding: 14px 18px;
+        .input-group {
             margin: 20px 0;
         }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 8px 0;
-            font-size: 0.9rem;
-        }
-        .info-row a {
-            color: #0f0;
-            text-decoration: none;
-        }
-        .info-row i {
-            width: 28px;
-            color: #00f6ff;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 15px 0;
-            font-size: 0.85rem;
-        }
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: #0f0;
-            border-radius: 50%;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        input {
+        .input-group input {
             width: 100%;
             background: #05080f;
             border: 1px solid #2a2f50;
@@ -142,14 +151,12 @@
             color: #fff;
             font-size: 1rem;
             outline: none;
-            margin: 10px 0;
         }
-        input:focus {
+        .input-group input:focus {
             border-color: #00f6ff;
             box-shadow: 0 0 10px #00f6ff;
         }
-
-        .btn {
+        .btn-neon {
             background: linear-gradient(95deg, #00c6fb, #005bea);
             border: none;
             border-radius: 60px;
@@ -164,76 +171,80 @@
             gap: 8px;
             transition: 0.2s;
         }
-        .btn:hover {
+        .btn-neon:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 20px #00c6fb;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #00f6ff;
-            color: #00f6ff;
-            margin-top: 12px;
+            box-shadow: 0 0 15px #00c6fb;
         }
 
-        .code-box {
-            background: #000000aa;
-            border-radius: 28px;
-            padding: 18px;
-            text-align: center;
-            border: 1px solid #b400ff;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        .code-digits {
-            font-size: 2rem;
-            letter-spacing: 4px;
-            font-weight: 800;
-            color: #b400ff;
-            font-family: monospace;
-        }
-
-        .bots-section {
-            margin-top: 25px;
-            display: none;
-        }
-        .bots-card {
-            background: #0a0d1ae0;
-            border-radius: 28px;
-            padding: 20px;
-            border: 1px solid #00f6ff30;
-        }
-        .bot-item {
-            background: #05080f;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
+        .info-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            margin: 15px 0;
             flex-wrap: wrap;
         }
-        .bot-number {
-            font-family: monospace;
-            font-weight: 600;
+        .info-row i {
+            width: 28px;
+            color: #00f6ff;
         }
-        .bot-status {
+        .info-row a {
             color: #0f0;
+            text-decoration: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0a0d1a;
+            border-radius: 60px;
+            padding: 6px 16px;
             font-size: 0.8rem;
+            border: 1px solid #00f6ff;
         }
-        .disconnect-btn {
-            background: none;
-            border: 1px solid #ff4444;
-            color: #ff4444;
-            border-radius: 40px;
-            padding: 4px 12px;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #0f0;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #00f6ff40;
+            border-radius: 60px;
+            padding: 8px 20px;
+            color: #00f6ff;
             cursor: pointer;
-            font-size: 0.7rem;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
+        .action-btn:hover {
+            background: #00f6ff20;
+            border-color: #00f6ff;
+        }
+
         .footer {
             text-align: center;
-            font-size: 0.7rem;
-            margin-top: 20px;
-            opacity: 0.5;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #00f6ff20;
+            font-size: 0.75rem;
+            opacity: 0.7;
         }
 
         .toast {
@@ -252,172 +263,292 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        @media (max-width: 500px) {
-            .glass-card {
-                padding: 20px;
-            }
-            .code-digits {
-                font-size: 1.5rem;
-                letter-spacing: 2px;
-            }
+        @media (max-width: 700px) {
+            .container { padding: 20px; }
+            .pair-grid { gap: 20px; }
+            .code-display { font-size: 1.3rem; letter-spacing: 3px; }
         }
     </style>
 </head>
 <body>
-<div class="cyber-grid"></div>
+<div class="cyber-bg"></div>
 <div class="container">
-    <div class="glass-card">
-        <div class="logo"><i class="fas fa-bolt"></i></div>
-        <h1>⚡ JAMALI MD</h1>
-        <div class="info-panel">
-            <div class="info-row">
-                <span><i class="fas fa-crown"></i> OWNER</span>
-                <span><strong>JAMALI TECH TZ</strong> <i class="fab fa-whatsapp"></i> <a href="https://wa.me/255784062158">+255 784 062 158</a></span>
+    <div class="top-bar">
+        <div class="lang-switch">
+            <span class="active" data-lang="en">EN</span>
+            <span data-lang="sw">SW</span>
+        </div>
+    </div>
+
+    <div class="pair-grid">
+        <!-- QR CODE SECTION -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-qrcode"></i> <span class="card-title-text">QR CODE</span></div>
+            <div class="qr-placeholder" id="qrContainer">
+                <div class="qr-code" id="qrCodeDisplay">📱 Scan to pair</div>
             </div>
-            <div class="info-row">
-                <span><i class="fas fa-hashtag"></i> CHANNEL</span>
-                <span><a href="https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h" target="_blank">Join Official Channel →</a></span>
+            <div class="info-row" style="margin-top: 15px;">
+                <i class="fas fa-mobile-alt"></i> <span id="qrInfoText">Quick Connection</span>
             </div>
         </div>
-        <div class="status"><div class="dot"></div><span>SYSTEM READY</span></div>
-        
-        <input type="tel" id="phoneNumber" placeholder="Enter number with country code (e.g., 255784062158)" value="255">
-        <button class="btn" id="genPairBtn"><i class="fas fa-key"></i> GENERATE PAIRING CODE</button>
-        
-        <div class="code-box" id="codeBox">
-            <div class="code-digits" id="pairCodeDisplay">—— —— ——</div>
-            <div style="font-size:0.7rem; margin-top:6px"><i class="fas fa-copy"></i> tap to copy</div>
+
+        <!-- PAIRING CODE SECTION -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-key"></i> <span class="card-title-text">PAIRING CODE</span></div>
+            <div class="code-display" id="pairCodeDisplay" onclick="copyPairCode()">—— —— ——</div>
+            <div class="input-group">
+                <input type="tel" id="phoneNumber" placeholder="WhatsApp Number (e.g., 255784062158)" value="255">
+            </div>
+            <button class="btn-neon" id="generateBtn"><i class="fas fa-sync-alt"></i> <span class="btn-text">GENERATE</span></button>
+            <div class="info-row">
+                <i class="fas fa-check-circle"></i> <span id="pairInfoText">Device Sync</span>
+            </div>
         </div>
-        
-        <button class="btn btn-outline" id="viewBotsBtn"><i class="fas fa-eye"></i> VIEW ACTIVE BOTS (ADMIN)</button>
-        
-        <div id="botsContainer" class="bots-section">
-            <div class="bots-card">
-                <div id="botsList"></div>
+
+        <!-- LINKS & INFO -->
+        <div class="glass-card">
+            <div class="card-title"><i class="fas fa-link"></i> <span class="card-title-text">QUICK LINKS</span></div>
+            <div class="info-row">
+                <i class="fab fa-whatsapp"></i> <a href="https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h" target="_blank">WHATSAPP CHANNEL</a>
+            </div>
+            <div class="info-row">
+                <i class="fab fa-github"></i> <a href="https://github.com/jamalitechempi/jamali-bot" target="_blank">GITHUB REPOSITORY</a>
+            </div>
+            <div class="info-row">
+                <i class="fas fa-users"></i> <a href="https://chat.whatsapp.com/GPdlJ8ip88K39E5Hok7rJh" target="_blank">JOIN OUR CHANNEL</a>
+            </div>
+            <div class="status-badge" style="margin-top: 20px;">
+                <div class="status-dot"></div> <span id="systemStatus">System Online</span> <span style="margin-left: 8px;">v2.0.0 PRO</span>
             </div>
         </div>
     </div>
-    <div class="footer">🔒 Secure pairing • Powered by JAMALI TECH TZ | Pairing code: JAMALITZ</div>
+
+    <!-- ACTION BUTTONS (Music, Overlay, Contact Owner, Alive, Bot, User) -->
+    <div class="action-buttons">
+        <button class="action-btn" id="musicBtn"><i class="fas fa-music"></i> <span>MUSIC ON/OFF</span></button>
+        <button class="action-btn" id="overlayBtn"><i class="fas fa-moon"></i> <span>OVERLAY</span></button>
+        <button class="action-btn" id="ownerBtn"><i class="fas fa-headset"></i> <span>CT OWNER</span></button>
+        <button class="action-btn" id="aliveBtn"><i class="fas fa-heartbeat"></i> <span>ALIVE</span></button>
+        <button class="action-btn" id="botBtn"><i class="fas fa-robot"></i> <span>BOT</span></button>
+        <button class="action-btn" id="userBtn"><i class="fas fa-user"></i> <span>USER</span></button>
+    </div>
+
+    <div class="footer">
+        <div>© 2026 JAMALI TECH EMPIRE • Premium WhatsApp Bot Framework</div>
+        <div style="margin-top: 8px;">Powered by JAMALI TECH EMPIRE</div>
+    </div>
 </div>
-<div id="toast" class="toast"></div>
+
+<div id="toast" class="toast">Copied!</div>
+
+<audio id="bgMusic" src="https://files.catbox.moe/iwpfp2.mp3" loop></audio>
 
 <script>
-    // ========== CONSTANTS ==========
-    const ADMIN_PASSWORD = "JAMALI2026";  // change as needed
-    // pairing code fixed to JAMALITZ (kama unavyotaka)
-    const FIXED_PAIRING_CODE = "JAMALITZ";
+    // Language translations
+    const translations = {
+        en: {
+            qrTitle: "QR CODE",
+            pairingTitle: "PAIRING CODE",
+            linksTitle: "QUICK LINKS",
+            qrInfo: "Quick Connection",
+            pairInfo: "Device Sync",
+            generate: "GENERATE",
+            music: "MUSIC ON/OFF",
+            overlay: "OVERLAY",
+            owner: "CT OWNER",
+            alive: "ALIVE",
+            bot: "BOT",
+            user: "USER",
+            systemStatus: "System Online",
+            footer: "© 2026 JAMALI TECH EMPIRE • Premium WhatsApp Bot Framework"
+        },
+        sw: {
+            qrTitle: "MSIMBO WA QR",
+            pairingTitle: "MSIMBO WA KUOANISHA",
+            linksTitle: "VIUNGO VYA HARAKA",
+            qrInfo: "Unganisha Haraka",
+            pairInfo: "Sawazisha Kifaa",
+            generate: "TOA MSIMBO",
+            music: "MUZIKI WASH/ ZIMA",
+            overlay: "KITANDA CHA JUU",
+            owner: "MWASILIANO NA MMILIKI",
+            alive: "BOT IKO HAI",
+            bot: "BOT",
+            user: "MTUMIAJI",
+            systemStatus: "Mfumo Uko Hai",
+            footer: "© 2026 JAMALI TECH EMPIRE • Mfumo Bora wa WhatsApp Bot"
+        }
+    };
 
+    let currentLang = 'en';
+    let musicPlaying = false;
+    let overlayActive = true;
+
+    // Elements
+    const phoneInput = document.getElementById('phoneNumber');
+    const generateBtn = document.getElementById('generateBtn');
+    const pairCodeDiv = document.getElementById('pairCodeDisplay');
+    const toast = document.getElementById('toast');
+    const audio = document.getElementById('bgMusic');
+    const overlayDiv = document.createElement('div');
+    overlayDiv.id = 'customOverlay';
+    overlayDiv.style.position = 'fixed';
+    overlayDiv.style.top = '0';
+    overlayDiv.style.left = '0';
+    overlayDiv.style.width = '100%';
+    overlayDiv.style.height = '100%';
+    overlayDiv.style.backgroundColor = 'rgba(0,0,0,0.4)';
+    overlayDiv.style.backdropFilter = 'blur(2px)';
+    overlayDiv.style.zIndex = '1';
+    overlayDiv.style.pointerEvents = 'none';
+    document.body.appendChild(overlayDiv);
+
+    // Helper: show toast
     function showToast(msg, type = 'info') {
-        const toast = document.getElementById('toast');
         toast.innerText = msg;
         toast.style.borderLeftColor = type === 'error' ? '#ff4444' : '#00f6ff';
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ========== GENERATE PAIRING CODE (sasa haitegemei backend) ==========
-    function generateCode() {
-        let number = document.getElementById('phoneNumber').value.replace(/\D/g, '');
-        if (number.length < 9) {
-            showToast('Tafadhali ingiza namba halali (mwenye country code)', 'error');
-            return;
-        }
-        const btn = document.getElementById('genPairBtn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> PROCESSING...';
-        btn.disabled = true;
-        
-        // Simulate processing (optional delay)
-        setTimeout(() => {
-            const codeDiv = document.getElementById('pairCodeDisplay');
-            // Weka pairing code kuwa JAMALITZ
-            codeDiv.innerText = FIXED_PAIRING_CODE;
-            showToast(`✅ Pairing code ${FIXED_PAIRING_CODE} iko tayari!`);
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }, 400);
-    }
-
-    document.getElementById('genPairBtn').onclick = generateCode;
-    
-    // Copy code when clicking on the code box
-    document.getElementById('codeBox').onclick = () => {
-        let code = document.getElementById('pairCodeDisplay').innerText;
-        if (code && code !== '—— —— ——') {
+    // Copy pairing code
+    window.copyPairCode = () => {
+        let code = pairCodeDiv.innerText;
+        if (code && code !== '—— —— ——' && code !== 'FAILED' && code !== 'ERROR' && code !== 'ALREADY ACTIVE' && code !== '⏳') {
             navigator.clipboard.writeText(code);
-            showToast(`Code "${code}" imenakiliwa!`);
+            showToast('Code copied!');
         } else {
-            showToast('Bado hakuna code iliyozalishwa', 'error');
+            showToast('No valid code to copy', 'error');
         }
     };
 
-    // ========== ACTIVE BOTS (mock-up / example, unachotaka unaweza badilisha) ==========
-    let botsVisible = false;
-    let passwordAuthenticated = false;
-
-    // Hii ni mock data – ikihitaji backend halisi, unaweza kuireplace na fetch('/active') n.k.
-    function getMockBots() {
-        // Tofauti na HTML ya awali, sasa tunatoa mfano wa bot moja inayoonyesha pairing code JAMALITZ
-        return [
-            { number: "255784062158", uptime: 1240, status: "online" },
-            { number: "255712345678", uptime: 560, status: "online" }
-        ];
-    }
-
-    async function fetchActiveBots() {
-        // Badala ya kuitisha backend, tumia mock (au unaweza kurejesha original fetch)
-        // Ikiwa unataka kuunganisha na API yako halisi, fungua comment ya fetch chini na uifanye kazi.
-        // Kwa sasa tunatoa mfano wa bot active.
-        const bots = getMockBots();
-        const container = document.getElementById('botsList');
-        if (bots.length === 0) {
-            container.innerHTML = '<div style="text-align:center">No active bots connected.</div>';
+    // Generate pairing code
+    async function generateCode() {
+        let number = phoneInput.value.replace(/\D/g, '');
+        if (number.length < 9) {
+            showToast('Invalid number (use country code)', 'error');
             return;
         }
-        let html = '';
-        for (let bot of bots) {
-            const uptimeFormatted = Math.floor(bot.uptime / 60) + 'm ' + (bot.uptime % 60) + 's';
-            html += `
-                <div class="bot-item">
-                    <div><span class="bot-number">${bot.number}</span><br><span class="bot-status">● ONLINE · ${uptimeFormatted}</span></div>
-                    <button class="disconnect-btn" onclick="disconnectBot('${bot.number}')">Disconnect</button>
-                </div>
-            `;
-        }
-        container.innerHTML = html;
-    }
-
-    async function disconnectBot(number) {
-        if (confirm(`⚠️ Taka kuondoa bot ya ${number}? Hii itafuta session.`)) {
-            // Kwa mock, tunafuta kwenye array ya mfano tu
-            showToast(`Mock: Bot ${number} imetengwa.`, 'error');
-            // Ukitaka halisi, ungeweka fetch('/disconnect?number='+number)
-            await fetchActiveBots(); // refresh display
-        }
-    }
-
-    const viewBtn = document.getElementById('viewBotsBtn');
-    const botsContainer = document.getElementById('botsContainer');
-
-    viewBtn.onclick = () => {
-        if (!passwordAuthenticated) {
-            const pass = prompt("🔐 Ingiza password ya admin kuona active bots:");
-            if (pass === ADMIN_PASSWORD) {
-                passwordAuthenticated = true;
-                botsContainer.style.display = 'block';
-                fetchActiveBots();
+        const btn = generateBtn;
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> PROCESSING...';
+        btn.disabled = true;
+        pairCodeDiv.innerText = '⏳';
+        try {
+            const res = await fetch(`/code?number=${number}`);
+            const data = await res.json();
+            if (data.code) {
+                pairCodeDiv.innerText = data.code;
+                showToast('✅ Pairing code generated!');
+            } else if (data.status === 'already_connected') {
+                pairCodeDiv.innerText = 'ALREADY ACTIVE';
+                showToast('Bot already connected for this number', 'error');
             } else {
-                showToast('Password si sahihi', 'error');
+                pairCodeDiv.innerText = 'FAILED';
+                showToast('Failed to generate code', 'error');
             }
+        } catch (err) {
+            pairCodeDiv.innerText = 'ERROR';
+            showToast('Server error', 'error');
+        }
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+    }
+
+    generateBtn.onclick = generateCode;
+
+    // QR Code simulation (you can replace with actual QR from backend)
+    function updateQR() {
+        const qrContainer = document.getElementById('qrContainer');
+        const qrDisplay = document.getElementById('qrCodeDisplay');
+        let number = phoneInput.value.replace(/\D/g, '');
+        if (number.length < 9) {
+            qrDisplay.innerHTML = '📱 Invalid number';
+            return;
+        }
+        // In a real scenario, you'd generate a QR that contains the pairing URL or code
+        // For demonstration, we show a text QR placeholder
+        qrDisplay.innerHTML = `<div style="font-family: monospace; font-size: 0.8rem;">Scan to pair<br>+${number}</div>`;
+        // If you have a QR library, you can generate image here
+        // new QRCode(qrContainer, { text: `${window.location.origin}/code?number=${number}`, width: 150, height: 150 });
+    }
+    phoneInput.addEventListener('input', updateQR);
+    updateQR();
+
+    // Language switcher
+    function applyLanguage(lang) {
+        const t = translations[lang];
+        document.querySelectorAll('.card-title-text').forEach((el, idx) => {
+            if (idx === 0) el.innerText = t.qrTitle;
+            else if (idx === 1) el.innerText = t.pairingTitle;
+            else if (idx === 2) el.innerText = t.linksTitle;
+        });
+        document.getElementById('qrInfoText').innerText = t.qrInfo;
+        document.getElementById('pairInfoText').innerText = t.pairInfo;
+        document.querySelector('.btn-text').innerText = t.generate;
+        document.querySelector('#musicBtn span').innerText = t.music;
+        document.querySelector('#overlayBtn span').innerText = t.overlay;
+        document.querySelector('#ownerBtn span').innerText = t.owner;
+        document.querySelector('#aliveBtn span').innerText = t.alive;
+        document.querySelector('#botBtn span').innerText = t.bot;
+        document.querySelector('#userBtn span').innerText = t.user;
+        document.getElementById('systemStatus').innerText = t.systemStatus;
+        document.querySelector('.footer div:first-child').innerText = t.footer;
+    }
+
+    document.querySelectorAll('.lang-switch span').forEach(span => {
+        span.onclick = () => {
+            document.querySelectorAll('.lang-switch span').forEach(s => s.classList.remove('active'));
+            span.classList.add('active');
+            currentLang = span.getAttribute('data-lang');
+            applyLanguage(currentLang);
+        };
+    });
+    applyLanguage('en');
+
+    // Music toggle
+    const musicBtn = document.getElementById('musicBtn');
+    musicBtn.onclick = () => {
+        if (musicPlaying) {
+            audio.pause();
+            musicPlaying = false;
+            showToast('Music Off');
         } else {
-            if (botsContainer.style.display === 'none' || botsContainer.style.display === '') {
-                botsContainer.style.display = 'block';
-                fetchActiveBots();
-            } else {
-                botsContainer.style.display = 'none';
-            }
+            audio.play().catch(e => console.log);
+            musicPlaying = true;
+            showToast('Music On');
         }
+    };
+
+    // Overlay toggle
+    const overlayBtn = document.getElementById('overlayBtn');
+    overlayBtn.onclick = () => {
+        if (overlayActive) {
+            overlayDiv.style.display = 'none';
+            overlayActive = false;
+            showToast('Overlay Disabled');
+        } else {
+            overlayDiv.style.display = 'block';
+            overlayActive = true;
+            showToast('Overlay Enabled');
+        }
+    };
+
+    // Contact owner
+    document.getElementById('ownerBtn').onclick = () => {
+        window.open('https://wa.me/255784062158', '_blank');
+    };
+
+    // Alive, Bot, User buttons (simple alerts or status)
+    document.getElementById('aliveBtn').onclick = () => {
+        showToast('✅ Bot is alive and running!');
+    };
+    document.getElementById('botBtn').onclick = () => {
+        showToast('🤖 JAMALI MD Bot active');
+    };
+    document.getElementById('userBtn').onclick = () => {
+        showToast('👤 User: ' + (phoneInput.value || 'Not set'));
     };
 </script>
 </body>
-</html>
+                                        </html>
