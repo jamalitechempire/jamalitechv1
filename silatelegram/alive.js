@@ -2,15 +2,40 @@ module.exports = {
     command: 'alive',
     function: async (ctx) => {
         try {
+            const uptime = process.uptime();
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const uptimeStr = `${hours}h ${minutes}m`;
+
             await ctx.replyWithPhoto(
-                { url: 'https://files.catbox.moe/natk49.jpg' },
+                { url: 'https://files.catbox.moe/0e3rok.jpg' },
                 {
-                    caption: `🤖 *𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝙱𝙾𝚃 𝙸𝚂 𝙰𝙻𝙸𝚅𝙴!* 🤖\n\n✨ 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙰𝚌𝚝𝚒𝚟𝚎 & 𝚁𝚞𝚗𝚗𝚒𝚗𝚐\n⏰ 𝚄𝚙𝚝𝚒𝚖𝚎: 24/7\n🔧 𝚅𝚎𝚛𝚜𝚒𝚘𝚗: 3.0.0\n📊 𝙿𝚎𝚛𝚏𝚘𝚛𝚖𝚊𝚗𝚌𝚎: 𝙾𝚙𝚝𝚒𝚖𝚊𝚕\n\n🚀 *𝙵𝚎𝚊𝚝𝚞𝚛𝚎𝚜:*\n• 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝙱𝚘𝚝 𝙿𝚊𝚒𝚛𝚒𝚗𝚐\n• 𝙰𝚞𝚝𝚘-𝙵𝚘𝚕𝚕𝚘𝚠 𝙲𝚑𝚊𝚗𝚗𝚎𝚕𝚜\n• 𝙰𝙸 𝙸𝚗𝚝𝚎𝚐𝚛𝚊𝚝𝚒𝚘𝚗\n• 𝙼𝚞𝚕𝚝𝚒-𝙽𝚞𝚖𝚋𝚎𝚛 𝚂𝚞𝚙𝚙𝚘𝚛𝚝\n\n> © 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡`,
+                    caption: `⚡ *JAMALI MD IS ALIVE* ⚡\n\n` +
+                        `✨ *Status:* \`Active & Ready\`\n` +
+                        `⏰ *Uptime:* \`${uptimeStr}\`\n` +
+                        `🔧 *Version:* \`3.0.0\`\n` +
+                        `📊 *Performance:* \`Optimal\`\n\n` +
+                        `🚀 *Modern Features:*\n` +
+                        `• 🔐 WhatsApp Pairing System\n` +
+                        `• 📰 Auto-Follow Channels\n` +
+                        `• 🤖 AI Integration (ChatGPT)\n` +
+                        `• 📱 Multi-Number Support\n` +
+                        `• 🎵 Music & Sticker Tools\n` +
+                        `• 🛡️ Anti-Call & Group Manager\n\n` +
+                        `> 🔥 Powered by *JAMALI TECH TZ*`,
                     parse_mode: 'Markdown'
                 }
             );
         } catch (error) {
-            await ctx.reply(`🤖 *𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝙱𝙾𝚃 𝙸𝚂 𝙰𝙻𝙸𝚅𝙴!* 🤖\n\n✨ 𝚂𝚝𝚊𝚝𝚞𝚜: 𝙰𝚌𝚝𝚒𝚟𝚎 & 𝚁𝚞𝚗𝚗𝚒𝚗𝚐\n⏰ 𝚄𝚙𝚝𝚒𝚖𝚎: 24/7\n🔧 𝚅𝚎𝚛𝚜𝚒𝚘𝚗: 3.0.0\n📊 𝙿𝚎𝚛𝚏𝚘𝚛𝚖𝚊𝚗𝚌𝚎: 𝙾𝚙𝚝𝚒𝚖𝚊𝚕\n\n> © 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡`, { parse_mode: 'Markdown' });
+            await ctx.reply(
+                `⚡ *JAMALI MD IS ALIVE* ⚡\n\n` +
+                `✨ *Status:* Active & Running\n` +
+                `⏰ *Uptime:* 24/7\n` +
+                `🔧 *Version:* 3.0.0\n` +
+                `📊 *Performance:* Optimal\n\n` +
+                `> 🔥 Powered by *JAMALI TECH TZ*`,
+                { parse_mode: 'Markdown' }
+            );
         }
     }
 };
