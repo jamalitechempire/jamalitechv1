@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>JAMALI MD | Multi-Server Pairing (1-10)</title>
+    <title>JAMALI MD | Secure Pairing (Server 1-10)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0a0c14;font-family:'Inter',sans-serif;color:#fff;padding:20px}
+        body{background:radial-gradient(circle at 10% 20%,#050b1a,#010105);font-family:'Inter',sans-serif;color:#fff;padding:20px}
         .container{max-width:1400px;margin:0 auto}
-        h1{text-align:center;margin-bottom:30px;background:linear-gradient(135deg,#00f6ff,#b400ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .servers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px}
+        h1{text-align:center;margin-bottom:20px;background:linear-gradient(135deg,#00f6ff,#b400ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+        .servers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px}
         .server-card{background:rgba(12,15,30,0.6);backdrop-filter:blur(12px);border-radius:24px;border:1px solid rgba(0,246,255,0.2);padding:20px;transition:0.2s}
         .server-card:hover{border-color:#00f6ff;box-shadow:0 0 15px rgba(0,246,255,0.2)}
         .server-title{font-size:1.3rem;font-weight:600;margin-bottom:15px;color:#00f6ff;display:flex;align-items:center;gap:8px}
@@ -24,20 +24,53 @@
         .status{font-size:0.8rem;margin-top:8px;padding:4px;border-radius:20px;text-align:center}
         .online{background:#00ff8820;color:#0f0}
         .offline{background:#ff444420;color:#ff4444}
+        .admin-section{margin-top:40px;background:rgba(0,0,0,0.5);border-radius:28px;padding:20px}
+        .admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+        .admin-header button{background:transparent;border:1px solid #00f6ff;color:#00f6ff;border-radius:40px;padding:6px 15px;cursor:pointer}
+        .sessions-table{overflow-x:auto}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:10px;text-align:left;border-bottom:1px solid #1f2330}
+        th{color:#00f6ff}
         .footer{text-align:center;margin-top:40px;opacity:0.6}
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;padding:10px 20px;border-radius:40px;transition:0.3s;z-index:1000;border-left:4px solid #00f6ff}
+        .toast.show{transform:translateX(-50%) translateY(0)}
     </style>
 </head>
 <body>
 <div class="container">
-    <h1><i class="fas fa-server"></i> JAMALI MD • Multi-Server Pairing (1-10)</h1>
+    <h1><i class="fas fa-server"></i> JAMALI MD • SECURE PAIRING (1-10)</h1>
     <div class="servers-grid" id="serversGrid"></div>
+
+    <!-- Admin-only section (hidden by default) -->
+    <div id="adminSection" class="admin-section" style="display:none;">
+        <div class="admin-header">
+            <h3><i class="fas fa-eye"></i> Active Sessions (Admin View)</h3>
+            <button id="refreshSessionsBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div id="sessionsList" class="sessions-table">Loading...</div>
+    </div>
+
     <div class="footer">Powered by JAMALI TECH TZ | Server 1-10 | Pair up to 10 bots</div>
 </div>
-<script>
-    // Configuration: 10 servers
-    const TOTAL_SERVERS = 10;
-    let serverStatus = {}; // store status for each server number
+<div id="toast" class="toast"></div>
 
+<script>
+    // ==================== CONFIG ====================
+    const ADMIN_PASSWORD = "JAMALI2026"; // Change this to your own password
+    let adminAuthenticated = false;
+    const TOTAL_SERVERS = 10;
+    let serverStatus = {};
+
+    // Helper: toast message
+    function showToast(msg, type='info') {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.borderLeftColor = type === 'error' ? '#ff4444' : '#00f6ff';
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ==================== PAIRING FUNCTIONS ====================
     async function checkStatus(serverNum, number) {
         if (!number || number.length < 9) return;
         try {
@@ -52,19 +85,15 @@
         const statusDiv = document.getElementById(`status-${serverNum}`);
         if (statusDiv) {
             const status = serverStatus[serverNum];
-            if (status === 'connected') {
-                statusDiv.innerHTML = '<span class="online">✅ CONNECTED</span>';
-            } else if (status === 'disconnected') {
-                statusDiv.innerHTML = '<span class="offline">❌ DISCONNECTED</span>';
-            } else {
-                statusDiv.innerHTML = '<span class="offline">⚠️ OFFLINE</span>';
-            }
+            if (status === 'connected') statusDiv.innerHTML = '<span class="online">✅ CONNECTED</span>';
+            else if (status === 'disconnected') statusDiv.innerHTML = '<span class="offline">❌ DISCONNECTED</span>';
+            else statusDiv.innerHTML = '<span class="offline">⚠️ OFFLINE</span>';
         }
     }
 
     async function generateCode(serverNum, number) {
         if (!number || number.length < 9) {
-            alert(`Server ${serverNum}: Invalid number`);
+            showToast(`Server ${serverNum}: Invalid number`, 'error');
             return;
         }
         const codeDiv = document.getElementById(`code-${serverNum}`);
@@ -77,19 +106,20 @@
             const data = await res.json();
             if (data.code) {
                 codeDiv.innerText = data.code;
-                // After successful pairing, check status later
+                showToast(`Server ${serverNum}: Code generated`, 'success');
                 setTimeout(() => checkStatus(serverNum, number), 3000);
             } else if (data.status === 'already_connected') {
                 codeDiv.innerText = 'ALREADY ACTIVE';
                 serverStatus[serverNum] = 'connected';
                 updateStatusUI(serverNum);
+                showToast(`Server ${serverNum}: Already connected`, 'error');
             } else {
                 codeDiv.innerText = 'FAILED';
-                serverStatus[serverNum] = 'disconnected';
-                updateStatusUI(serverNum);
+                showToast(`Server ${serverNum}: Failed to generate code`, 'error');
             }
         } catch(err) {
             codeDiv.innerText = 'ERROR';
+            showToast(`Server ${serverNum}: Network error`, 'error');
         }
         btn.disabled = false;
         btn.innerHTML = 'GENERATE';
@@ -99,12 +129,51 @@
         const code = document.getElementById(`code-${serverNum}`).innerText;
         if (code && !['——', '⏳', 'FAILED', 'ERROR', 'ALREADY ACTIVE'].includes(code)) {
             navigator.clipboard.writeText(code);
-            alert(`Server ${serverNum}: Code copied`);
+            showToast(`Server ${serverNum}: Code copied`);
         } else {
-            alert(`Server ${serverNum}: No valid code`);
+            showToast(`Server ${serverNum}: No valid code`, 'error');
         }
     }
 
+    // ==================== ADMIN SESSIONS (password protected) ====================
+    async function loadSessions() {
+        if (!adminAuthenticated) return;
+        try {
+            const res = await fetch('/active');
+            const data = await res.json();
+            const sessions = data.numbers || [];
+            let html = `<table><thead><tr><th>#</th><th>Number</th><th>Status</th><th>Uptime</th><th>Action</th></tr></thead><tbody>`;
+            for (let i = 0; i < sessions.length; i++) {
+                const num = sessions[i];
+                let uptime = '--';
+                try {
+                    const sRes = await fetch(`/status?number=${num}`);
+                    const sData = await sRes.json();
+                    uptime = (sData.uptime || 0) + 's';
+                } catch(e) {}
+                html += `<tr>
+                            <td>${i+1}</td>
+                            <td>${num}</td>
+                            <td><span style="color:#0f0">● ONLINE</span></td>
+                            <td>${uptime}</td>
+                            <td><button class="disconnect-btn" onclick="disconnectBot('${num}')" style="background:transparent;border:1px solid #ff4444;color:#ff4444;border-radius:40px;padding:4px 12px;cursor:pointer">Disconnect</button></td>
+                         </tr>`;
+            }
+            if (sessions.length === 0) html += '<tr><td colspan="5">No active bots</td></tr>';
+            html += `</tbody></table>`;
+            document.getElementById('sessionsList').innerHTML = html;
+        } catch(e) { document.getElementById('sessionsList').innerHTML = '<p>Error loading sessions</p>'; }
+    }
+
+    window.disconnectBot = async (num) => {
+        if(confirm(`Disconnect bot for ${num}?`)){
+            await fetch(`/disconnect?number=${num}`);
+            showToast(`Bot ${num} disconnected`);
+            loadSessions();
+        }
+    };
+
+    // ==================== RENDER SERVERS ====================
     function renderServers() {
         const grid = document.getElementById('serversGrid');
         let html = '';
@@ -125,7 +194,7 @@
             `;
         }
         grid.innerHTML = html;
-        // Initialize status for each server (will check on input change)
+        // Attach change events to check status when number changes
         for (let i = 1; i <= TOTAL_SERVERS; i++) {
             const input = document.getElementById(`number-${i}`);
             input.addEventListener('change', () => {
@@ -136,7 +205,34 @@
         }
     }
 
+    // ==================== ADMIN LOGIN (show sessions) ====================
+    function promptAdminAccess() {
+        const pass = prompt("🔐 Enter admin password to view active sessions:");
+        if (pass === ADMIN_PASSWORD) {
+            adminAuthenticated = true;
+            document.getElementById('adminSection').style.display = 'block';
+            loadSessions();
+            showToast("Admin access granted", "success");
+        } else {
+            showToast("Wrong password", "error");
+        }
+    }
+
+    // Add a button to the page for admin to access sessions (but no link to admin panel)
+    function addAdminAccessButton() {
+        const btnContainer = document.createElement('div');
+        btnContainer.style.textAlign = 'center';
+        btnContainer.style.marginTop = '30px';
+        btnContainer.innerHTML = `<button id="adminAccessBtn" style="background:transparent;border:1px solid #00f6ff;color:#00f6ff;border-radius:40px;padding:8px 20px;cursor:pointer"><i class="fas fa-lock"></i> Admin View (Sessions)</button>`;
+        document.querySelector('.container').appendChild(btnContainer);
+        document.getElementById('adminAccessBtn').onclick = promptAdminAccess;
+    }
+
     renderServers();
+    addAdminAccessButton();
+
+    // Refresh sessions button
+    document.getElementById('refreshSessionsBtn')?.addEventListener('click', loadSessions);
 </script>
 </body>
 </html>
