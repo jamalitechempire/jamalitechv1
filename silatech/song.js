@@ -57,11 +57,11 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                 // Send combined message with image and audio
                 await conn.sendMessage(from, { 
                     image: { url: thumbnail },
-                    caption: `╭━━【 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝙱𝙾𝚃 】━━━━━━━━╮
-│ *song:* ${title}
+                    caption: `╭━━【 JAMALI MD 】━━━━━━━━╮
+│ *Song:* ${title}
 ╰━━━━━━━━━━━━━━━━━━━━╯
 
-${config.BOT_FOOTER || '> © 𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 𝐒𝐢𝐥𝐚 𝐓𝐞𝐜𝐡'}`,
+${config.BOT_FOOTER || '> 🔥 Powered by JAMALI TECH TZ'}`,
                     audio: { url: response.data.audio },
                     mimetype: "audio/mpeg"
                 }, { quoted: myquoted });
