@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-<title>JAMALI MD • ULTRA DASHBOARD</title>
+<title>JAMALI TECH EMPIRE • ULTRA DASHBOARD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -23,7 +24,10 @@ color:white;
 min-height:100vh;
 padding:18px;
 overflow-x:hidden;
+position:relative;
 }
+
+/* BACKGROUND */
 
 body::before{
 content:'';
@@ -49,10 +53,14 @@ right:-100px;
 z-index:-1;
 }
 
+/* CONTAINER */
+
 .container{
 max-width:1500px;
 margin:auto;
 }
+
+/* GLASS EFFECT */
 
 .glass{
 background:rgba(10,15,35,0.72);
@@ -65,6 +73,8 @@ box-shadow:
 inset 0 0 20px rgba(255,255,255,0.02);
 margin-bottom:25px;
 }
+
+/* TOPBAR */
 
 .topbar{
 display:flex;
@@ -81,15 +91,20 @@ gap:14px;
 }
 
 .logo{
-width:65px;
-height:65px;
+width:70px;
+height:70px;
 border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:28px;
+overflow:hidden;
+padding:3px;
 background:linear-gradient(135deg,#00e5ff,#0066ff);
 box-shadow:0 0 25px #00bfff70;
+}
+
+.logo img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:18px;
 }
 
 .title h1{
@@ -106,6 +121,8 @@ font-size:14px;
 color:#9db3d5;
 margin-top:5px;
 }
+
+/* BUTTONS */
 
 .actions{
 display:flex;
@@ -141,6 +158,8 @@ background:transparent;
 border:1px solid #00e5ff;
 color:#00e5ff;
 }
+
+/* HERO */
 
 .hero{
 margin-top:30px;
@@ -220,6 +239,8 @@ animation:pulse 1s infinite;
 100%{transform:scale(1)}
 }
 
+/* MINI STATS */
+
 .stats-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -255,6 +276,8 @@ margin-top:5px;
 color:#8ca5c9;
 font-size:14px;
 }
+
+/* TABLE */
 
 .section-title{
 font-size:1.2rem;
@@ -297,6 +320,8 @@ tr:hover{
 background:#00d0ff08;
 }
 
+/* USER */
+
 .user-box{
 display:flex;
 align-items:center;
@@ -336,12 +361,74 @@ background:#00ff88;
 box-shadow:0 0 8px #00ff88;
 }
 
+/* SOCIAL */
+
+.social-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+margin-top:20px;
+}
+
+.social-card{
+text-decoration:none;
+display:flex;
+align-items:center;
+gap:18px;
+padding:22px;
+border-radius:25px;
+transition:.3s;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.channel-card{
+background:linear-gradient(135deg,#00e5ff15,#005eff15);
+}
+
+.owner-card{
+background:linear-gradient(135deg,#141414,#0d1b2a);
+}
+
+.social-card:hover{
+transform:translateY(-6px);
+border-color:#00e5ff55;
+box-shadow:0 0 25px rgba(0,229,255,.12);
+}
+
+.social-icon{
+width:65px;
+height:65px;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+background:linear-gradient(135deg,#00e5ff,#0066ff);
+color:#fff;
+box-shadow:0 0 20px rgba(0,229,255,.25);
+}
+
+.social-card h3{
+font-size:17px;
+color:#fff;
+margin-bottom:5px;
+}
+
+.social-card p{
+font-size:14px;
+color:#9db3d5;
+}
+
+/* FOOTER */
+
 .footer{
 margin-top:30px;
 text-align:center;
 color:#7d92b2;
 font-size:14px;
 }
+
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -355,6 +442,14 @@ grid-template-columns:1fr 1fr;
 
 .hero-number{
 font-size:3rem;
+}
+
+}
+
+@media(max-width:700px){
+
+.social-grid{
+grid-template-columns:1fr;
 }
 
 }
@@ -383,6 +478,7 @@ font-size:2.5rem;
 }
 
 }
+
 </style>
 </head>
 
@@ -390,22 +486,27 @@ font-size:2.5rem;
 
 <div class="container">
 
+<!-- TOP -->
+
 <div class="glass">
 
 <div class="topbar">
 
 <div class="logo-box">
+
 <div class="logo">
-<i class="fas fa-robot"></i>
+<img src="https://files.catbox.moe/0e3rok.jpg">
 </div>
 
 <div class="title">
-<h1>JAMALI MD BOT</h1>
+<h1>JAMALI TECH EMPIRE</h1>
 <p>ULTRA MODERN MULTI DEVICE SYSTEM</p>
 </div>
+
 </div>
 
 <div class="actions">
+
 <button class="btn btn-primary" onclick="location.href='/pair'">
 <i class="fas fa-link"></i>
 PAIR DEVICE
@@ -415,6 +516,7 @@ PAIR DEVICE
 <i class="fas fa-shield-halved"></i>
 ADMIN PANEL
 </button>
+
 </div>
 
 </div>
@@ -506,6 +608,8 @@ Countries Connected
 
 </div>
 
+<!-- SESSIONS -->
+
 <div class="glass">
 
 <div class="section-title">
@@ -530,60 +634,36 @@ LIVE BOT SESSIONS
 <tbody id="sessionTable">
 
 <tr>
+
 <td>1</td>
 
 <td>
 <div class="user-box">
 <div class="avatar">J</div>
-<div>Jamali User</div>
+<div>Premium User</div>
 </div>
 </td>
 
-<td>255629004578</td>
+<td>
+<span style="
+background:#00e5ff12;
+padding:8px 14px;
+border-radius:40px;
+color:#00e5ff;
+font-weight:700;
+border:1px solid #00e5ff22;
+letter-spacing:1px;
+">
+2556•••04578
+</span>
+</td>
 
 <td>
 <span class="status">ONLINE</span>
 </td>
 
 <td>12h 42m</td>
-</tr>
 
-<tr>
-<td>2</td>
-
-<td>
-<div class="user-box">
-<div class="avatar">A</div>
-<div>Alpha Tech</div>
-</div>
-</td>
-
-<td>255742118822</td>
-
-<td>
-<span class="status">ONLINE</span>
-</td>
-
-<td>8h 11m</td>
-</tr>
-
-<tr>
-<td>3</td>
-
-<td>
-<div class="user-box">
-<div class="avatar">K</div>
-<div>Kings Bot</div>
-</div>
-</td>
-
-<td>255687990012</td>
-
-<td>
-<span class="status">ONLINE</span>
-</td>
-
-<td>5h 08m</td>
 </tr>
 
 </tbody>
@@ -594,6 +674,51 @@ LIVE BOT SESSIONS
 
 </div>
 
+<!-- SOCIAL -->
+
+<div class="glass">
+
+<div class="section-title">
+<i class="fas fa-globe"></i>
+OFFICIAL LINKS
+</div>
+
+<div class="social-grid">
+
+<a href="https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h"
+class="social-card channel-card">
+
+<div class="social-icon">
+<i class="fab fa-whatsapp"></i>
+</div>
+
+<div>
+<h3>JAMALI TECH EMPIRE</h3>
+<p>Official WhatsApp Channel</p>
+</div>
+
+</a>
+
+<a href="https://wa.me/255784062158?text=Hello%20Jamali%20Tech%20Empire"
+class="social-card owner-card">
+
+<div class="social-icon">
+<i class="fas fa-user-secret"></i>
+</div>
+
+<div>
+<h3>OWNER CONTACT</h3>
+<p>Chat With Jamali Tech</p>
+</div>
+
+</a>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+
 <div class="footer">
 POWERED BY JAMALI TECH TZ • NEXT GENERATION WHATSAPP BOT
 </div>
@@ -601,6 +726,16 @@ POWERED BY JAMALI TECH TZ • NEXT GENERATION WHATSAPP BOT
 </div>
 
 <script>
+
+function hideNumber(number){
+
+number = number.toString();
+
+if(number.length < 7) return number;
+
+return number.substring(0,4) + "•••" + number.substring(number.length - 5);
+
+}
 
 async function loadDashboard(){
 
@@ -637,13 +772,27 @@ ${num.substring(0,1)}
 </div>
 </td>
 
-<td>${num}</td>
+<td>
+<span style="
+background:#00e5ff12;
+padding:8px 14px;
+border-radius:40px;
+color:#00e5ff;
+font-weight:700;
+border:1px solid #00e5ff22;
+letter-spacing:1px;
+">
+${hideNumber(num)}
+</span>
+</td>
 
 <td>
 <span class="status">ONLINE</span>
 </td>
 
-<td>${Math.floor(Math.random()*12)+1}h ${Math.floor(Math.random()*59)}m</td>
+<td>
+${Math.floor(Math.random()*12)+1}h ${Math.floor(Math.random()*59)}m
+</td>
 
 </tr>
 `;
@@ -665,4 +814,4 @@ setInterval(loadDashboard,10000);
 </script>
 
 </body>
-    </html>
+</html>
