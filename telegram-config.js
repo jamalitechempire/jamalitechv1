@@ -4,8 +4,8 @@ module.exports = {
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || '7303596375',
     
     // Telegram bot settings
-    TELEGRAM_BOT_NAME: 'MOMY-KIDY Pairing Bot',
-    TELEGRAM_BOT_USERNAME: 'momy_kidy_bot',
+    TELEGRAM_BOT_NAME: 'JAMALI MD Pairing Bot',
+    TELEGRAM_BOT_USERNAME: 'jamali_md_bot',
     
     // Webhook settings (optional)
     TELEGRAM_WEBHOOK_URL: process.env.TELEGRAM_WEBHOOK_URL || null,
@@ -26,17 +26,17 @@ module.exports = {
     
     // Messages
     MESSAGES: {
-        WELCOME: `🤖 *𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝙱𝙾𝚃 𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝚂𝚈𝚂𝚃𝙴𝙼* 🤖\n\n👋 𝚆𝚎𝚕𝚌𝚘𝚖𝚎 𝚝𝚘 𝙼𝙾𝙼𝚈-𝙺𝙸𝙳𝚈 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝙱𝚘𝚝 𝙿𝚊𝚒𝚛𝚒𝚗𝚐 𝚂𝚢𝚜𝚝𝚎𝚖!\n\n𝚄𝚜𝚎 /𝚙𝚊𝚒𝚛 <𝚗𝚞𝚖𝚋𝚎𝚛> 𝚝𝚘 𝚌𝚘𝚗𝚗𝚎𝚌𝚝 𝚢𝚘𝚞𝚛 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚋𝚘𝚝!`,
-        HELP: `📚 *𝙷𝙴𝙻𝙿 𝙼𝙴𝙽𝚄*\n\n/𝚜𝚝𝚊𝚛𝚝 - 𝚂𝚝𝚊𝚛𝚝 𝚝𝚑𝚎 𝚋𝚘𝚝\n/𝚙𝚊𝚒𝚛 <𝚗𝚞𝚖𝚋𝚎𝚛> - 𝙿𝚊𝚒𝚛 𝚆𝚑𝚊𝚝𝚜𝙰𝚙𝚙 𝚋𝚘𝚝\n/𝚘𝚠𝚗𝚎𝚛 - 𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚘𝚠𝚗𝚎𝚛\n/𝚖𝚎𝚗𝚞 - 𝚂𝚑𝚘𝚠 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜 𝚖𝚎𝚗𝚞\n/𝚜𝚝𝚊𝚝𝚞𝚜 - 𝙲𝚑𝚎𝚌𝚔 𝚋𝚘𝚝 𝚜𝚝𝚊𝚝𝚞𝚜\n/𝚑𝚎𝚕𝚙 - 𝚂𝚑𝚘𝚠 𝚝𝚑𝚒𝚜 𝚖𝚎𝚜𝚜𝚊𝚐𝚎`,
-        OWNER: `👑 *𝙾𝚆𝙽𝙴𝚁 𝙸𝙽𝙵𝙾𝚁𝙼𝙰𝚃𝙸𝙾𝙽*\n\n📛 𝙽𝚊𝚖𝚎: 𝚂𝚒𝚕𝚊 𝚃𝚎𝚌𝚑\n📞 𝙿𝚑𝚘𝚗𝚎: +255 789 661 031\n📧 𝙴𝚖𝚊𝚒𝚕: 𝚜𝚒𝚕𝚊𝚝𝚎𝚌𝚑@𝚎𝚡𝚊𝚖𝚙𝚕𝚎.𝚌𝚘𝚖\n\n🔗 𝚃𝚎𝚕𝚎𝚐𝚛𝚊𝚖: @𝚜ir_sila`
+        WELCOME: `🤖 *JAMALI MD PAIRING SYSTEM* 🤖\n\n👋 Welcome to JAMALI MD WhatsApp Bot Pairing System!\n\nUse /pair <number> to connect your WhatsApp bot!`,
+        HELP: `📚 *HELP MENU*\n\n/start - Start the bot\n/pair <number> - Pair WhatsApp bot\n/owner - Contact owner\n/menu - Show commands menu\n/status - Check bot status\n/help - Show this message`,
+        OWNER: `👑 *OWNER INFORMATION*\n\n📛 Name: JAMALI TECH TZ\n📞 Phone: +255 784 062 158\n\n🔗 Telegram: @JAMALI_TECH_TZ`
     },
     
     // URLs
     URLS: {
-        GITHUB: 'https://github.com/Sila-Md/SILA-MD',
-        TELEGRAM_CHANNEL: 'https://t.me/sila_tech2',
-        TELEGRAM_GROUP: 'https://t.me/sila_md',
-        WHATSAPP_CHANNEL: 'https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02',
-        SUPPORT_GROUP: 'https://chat.whatsapp.com/IdGNaKt80DEBqirc2ek4ks'
+        GITHUB: 'https://github.com/Jamali-md/JAMALI-MD',
+        TELEGRAM_CHANNEL: 'https://t.me/jamali_md',
+        TELEGRAM_GROUP: 'https://t.me/jamali_md_group',
+        WHATSAPP_CHANNEL: 'https://whatsapp.com/channel/0029VbC7AgJK5cD71vGIpO3h',
+        SUPPORT_GROUP: 'https://chat.whatsapp.com/GPdlJ8ip88K39E5Hok7rJh'
     }
 };
