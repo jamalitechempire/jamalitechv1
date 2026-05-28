@@ -42,17 +42,17 @@ async (conn, mek, m, { from, reply }) => {
 ┃
 ╰━━━━━━━━━━━━━━━┈⊷
 
-*POWERED BY BILAL-MD* 👑`;
+*POWERED BY JAMALI MD* 👑`;
 
     await conn.sendMessage(from, {
-      image: { url: config.IMAGE_PATH || 'https://files.catbox.moe/kunzpz.png' },
+      image: { url: config.IMAGE_PATH || 'https://files.catbox.moe/0e3rok.jpg' },
       caption: status,
       contextInfo: {
         forwardingScore: 999,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          newsletterJid: '120363296818107681@newsletter',
-          newsletterName: 'BILAL-MD WHATSAPP BOT',
+          newsletterJid: '120363425061263455@newsletter',
+          newsletterName: 'JAMALI MD',
           serverMessageId: 143
         }
       }
@@ -63,4 +63,3 @@ async (conn, mek, m, { from, reply }) => {
   }
 
 });
-              
