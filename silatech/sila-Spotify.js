@@ -1,3 +1,5 @@
+// JAMALI MD - Spotify Audio Downloader
+
 const { cmd, commands } = require('../momy');
 const axios = require('axios');
 const fs = require('fs');
@@ -20,8 +22,8 @@ const fakevCard = {
 	},
 	message: {
 		contactMessage: {
-			displayName: "© 𝐒𝐈𝐋𝐀-𝐌𝐃",
-			vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:𝐒𝐈𝐋𝐀 𝐌𝐃 𝐁𝐎𝐓\nORG:𝐒𝐈𝐋𝐀-𝐌𝐃;\nTEL;type=CELL;type=VOICE;waid=255789661031:+255789661031\nEND:VCARD`
+			displayName: "© JAMALI MD",
+			vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:JAMALI MD BOT\nORG:JAMALI TECH TZ;\nTEL;type=CELL;type=VOICE;waid=255784062158:+255784062158\nEND:VCARD`
 		}
 	}
 };
@@ -125,7 +127,7 @@ function detectAudioFormat(buffer) {
 // Spotify command
 cmd({
 	pattern: 'spotify',
-	alias: ['spot', 'spoti', 'spotifyplay', 'spotmusic', 'spotify', 'silaspotify'],
+	alias: ['spot', 'spoti', 'spotifyplay', 'spotmusic', 'jamalispotify'],
 	react: '🎧',
 	desc: 'Search and play songs from Spotify',
 	category: 'downloader',
@@ -133,25 +135,27 @@ cmd({
 }, async (conn, mek, m, { from, sender, reply, q }) => {
 	try {
 		if (!q) {
-			return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚂𝙿𝙾𝚃𝙸𝙵𝚈 𝙿𝙻𝙰𝚈𝙴𝚁 ━━━━━━━━━
-┃ 🎧 𝚂𝚎𝚊𝚛𝚌𝚑 & 𝚙𝚕𝚊𝚢 𝚖𝚞𝚜𝚒𝚌 𝚏𝚛𝚘𝚖 𝚂𝚙𝚘𝚝𝚒𝚏𝚢
+			return reply(`┏━❑ JAMALI MD SPOTIFY PLAYER ━━━━━━━━━
+┃ 🎧 Search & play music from Spotify
 ┃
-┃ 𝚄𝚜𝚎: .𝚜𝚙𝚘𝚝𝚒𝚏𝚢 𝚜𝚘𝚗𝚐_𝚗𝚊𝚖𝚎
+┃ Use: .spotify song_name
 ┃
-┃ 𝙰𝚕𝚒𝚊𝚜𝚎𝚜:
-┃ • .𝚜𝚙𝚘𝚝
-┃ • .𝚜𝚙𝚘𝚝𝚖𝚞𝚜𝚒𝚌
-┃ • .𝚜𝚒𝚕𝚊𝚜𝚙𝚘𝚝𝚒𝚏𝚢
+┃ Aliases:
+┃ • .spot
+┃ • .spotmusic
+┃ • .jamalispotify
 ┃
-┃ 𝙴𝚡𝚊𝚖𝚙𝚕𝚎𝚜:
-┃ • .𝚜𝚙𝚘𝚝𝚒𝚏𝚢 𝙰𝚖𝚒𝚗𝙰𝚣𝚎𝚛𝚊
-┃ • .𝚜𝚙𝚘𝚝 𝙱𝚎𝚝𝚝𝚎𝚛 𝙷𝚊𝚣𝚎𝚕
-┗━━━━━━━━━━━━━━━━━━━━`);
+┃ Examples:
+┃ • .spotify Amanecer
+┃ • .spot Better Hazey
+┗━━━━━━━━━━━━━━━━━━━━
+
+> 🔥 Powered by JAMALI TECH TZ`);
 		}
 
 		// Show search progress
 		const searchMsg = await conn.sendMessage(from, {
-			text: `🔍 𝚂𝚎𝚊𝚛𝚌𝚑𝚒𝚗𝚐 𝚂𝚙𝚘𝚝𝚒𝚏𝚢 𝚏𝚘𝚛 *${q}*...`
+			text: `🔍 Searching Spotify for *${q}*...`
 		}, { quoted: mek });
 
 		// Search Spotify
@@ -160,29 +164,33 @@ cmd({
 			results = await searchSpotifyYupra(q);
 		} catch (searchErr) {
 			await conn.sendMessage(from, { delete: searchMsg.key });
-			return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚜𝚎𝚊𝚛𝚌𝚑 𝚎𝚛𝚛𝚘𝚛 ━━━━━━━━━
-┃ ❌ 𝙽𝚘 𝚛𝚎𝚜𝚞𝚕𝚝𝚜 𝚏𝚘𝚞𝚗𝚍
-┃ 𝚃𝚛𝚢 𝚖𝚘𝚛𝚎 𝚜𝚙𝚎𝚌𝚒𝚏𝚒𝚌 𝚛𝚖𝚎𝚜
-┗━━━━━━━━━━━━━━━━━━━━`);
+			return reply(`┏━❑ JAMALI MD search error ━━━━━━━━━
+┃ ❌ No results found
+┃ Try more specific query
+┗━━━━━━━━━━━━━━━━━━━━
+
+> 🔥 Powered by JAMALI TECH TZ`);
 		}
 
 		if (!results || results.length === 0) {
 			await conn.sendMessage(from, { delete: searchMsg.key });
-			return reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚜𝚎𝚊𝚛𝚌𝚑 ━━━━━━━━━
-┃ ❌ 𝙽𝚘 𝚛𝚎𝚜𝚞𝚕𝚝𝚜 𝚏𝚘𝚞𝚗𝚍
-┗━━━━━━━━━━━━━━━━━━━━`);
+			return reply(`┏━❑ JAMALI MD search ━━━━━━━━━
+┃ ❌ No results found
+┗━━━━━━━━━━━━━━━━━━━━
+
+> 🔥 Powered by JAMALI TECH TZ`);
 		}
 
 		// Use first result
 		const song = results[0];
 
 		// Build results list
-		let resultsList = `┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚂𝙿𝙾𝚃𝙸𝙵𝚈 𝚂𝙴𝙰𝚁𝙲𝙷 ━━━━━━\n┃\n`;
+		let resultsList = `┏━❑ JAMALI MD SPOTIFY SEARCH ━━━━━━\n┃\n`;
 		results.slice(0, 5).forEach((r, i) => {
 			const artists = r.artists?.map(a => a.name)?.join(', ') || 'Unknown';
-			resultsList += `┃ 𝟶${i + 1} • ${r.title?.substring(0, 35)}\n┃    🎤 ${artists.substring(0, 35)}\n┃\n`;
+			resultsList += `┃ 0${i + 1} • ${r.title?.substring(0, 35)}\n┃    🎤 ${artists.substring(0, 35)}\n┃\n`;
 		});
-		resultsList += `┗━━━━━━━━━━━━━━━━━━━━━\n\n🎧 𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍𝚒𝚗𝚐 𝚝𝚘𝚙 𝚛𝚎𝚜𝚞𝚕𝚝...`;
+		resultsList += `┗━━━━━━━━━━━━━━━━━━━━━\n\n🎧 Downloading top result...`;
 
 		const artistName = song.artists?.map(a => a.name)?.join(', ') || 'Unknown Artist';
 
@@ -280,17 +288,21 @@ cmd({
 
 		} catch (downloadErr) {
 			console.error('Download error:', downloadErr);
-			reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚍𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝚎𝚛𝚛𝚘𝚛 ━━━━━━━━━
-┃ ❌ 𝙵𝚊𝚒𝚕𝚎𝚍 𝚝𝚘 𝚍𝚘𝚠𝚗𝚕𝚘𝚊𝚍
-┃ 𝚙𝚕𝚎𝚊𝚜𝚎 𝚝𝚛𝚢 𝚊𝚐𝚊𝚒𝚗
-┗━━━━━━━━━━━━━━━━━━━━`, { quoted: fakevCard });
+			reply(`┏━❑ JAMALI MD download error ━━━━━━━━━
+┃ ❌ Failed to download
+┃ Please try again
+┗━━━━━━━━━━━━━━━━━━━━
+
+> 🔥 Powered by JAMALI TECH TZ`, { quoted: fakevCard });
 		}
 
 	} catch (err) {
 		console.error('Spotify command error:', err);
-		reply(`┏━❑ 𝐒𝙸𝙻𝐀-𝐌𝐃 𝚎𝚛𝚛𝚘𝚛 ━━━━━━━━━
-┃ ❌ 𝚂𝚘𝚖𝚎𝚝𝚑𝚒𝚗𝚐 𝚠𝚎𝚗𝚝 𝚠𝚛𝚘𝚗𝚐
-┃ 𝚃𝚛𝚢 𝚊𝚐𝚊𝚒𝚗 𝚕𝚊𝚝𝚎𝚛
-┗━━━━━━━━━━━━━━━━━━━━`, { quoted: fakevCard });
+		reply(`┏━❑ JAMALI MD error ━━━━━━━━━
+┃ ❌ Something went wrong
+┃ Try again later
+┗━━━━━━━━━━━━━━━━━━━━
+
+> 🔥 Powered by JAMALI TECH TZ`, { quoted: fakevCard });
 	}
 });
