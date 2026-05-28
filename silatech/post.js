@@ -45,7 +45,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                     font: statusOptions.font
                 });
                 
-                reply('✅ *Image posted to status successfully*');
+                reply(`✅ *Image posted to status successfully*\n\n> 🔥 Powered by JAMALI TECH TZ`);
                 
             } else if (quotedMsg?.videoMessage) {
                 // Handle video
@@ -57,7 +57,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                     backgroundColor: statusOptions.backgroundColor
                 });
                 
-                reply('✅ *Video posted to status successfully*');
+                reply(`✅ *Video posted to status successfully*\n\n> 🔥 Powered by JAMALI TECH TZ`);
                 
             } else if (quotedMsg?.audioMessage || quotedMsg?.ptvMessage) {
                 // Handle audio/voice
@@ -70,10 +70,10 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                     mentions: [sender]
                 });
                 
-                reply('✅ *Audio posted to status successfully*');
+                reply(`✅ *Audio posted to status successfully*\n\n> 🔥 Powered by JAMALI TECH TZ`);
                 
             } else {
-                reply('❌ *Unsupported media type*');
+                reply(`❌ *Unsupported media type*\n\n> 🔥 Powered by JAMALI TECH TZ`);
             }
             
         // Case 2: Just text status
@@ -84,7 +84,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                 font: statusOptions.font
             });
             
-            reply('✅ *Text posted to status successfully*');
+            reply(`✅ *Text posted to status successfully*\n\n> 🔥 Powered by JAMALI TECH TZ`);
         }
 
         // Final reaction
@@ -94,6 +94,6 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 
     } catch (e) {
         console.error('Status Command Error:', e);
-        reply(`❌ *Failed to post to status*\nError: ${e.message}`);
+        reply(`❌ *Failed to post to status*\nError: ${e.message}\n\n> 🔥 Powered by JAMALI TECH TZ`);
     }
 });
