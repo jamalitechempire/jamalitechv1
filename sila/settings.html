@@ -3,386 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAMALI MD | Settings</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>JAMALI MD | User Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0a0a0a 0%, #0a0f1a 50%, #000428 100%);
-            font-family: 'Inter', sans-serif;
-            color: #fff;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        .header h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #00f6ff, #b400ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .settings-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .settings-card h2 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .setting-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .setting-row:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h4 {
-            margin-bottom: 5px;
-        }
-
-        .setting-info p {
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.2);
-            transition: 0.3s;
-            border-radius: 34px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: #fff;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background: linear-gradient(135deg, #00f6ff, #b400ff);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
-        select, input[type="text"], input[type="number"] {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 246, 255, 0.3);
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 12px;
-            color: #fff;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background: rgba(0, 246, 255, 0.2);
-        }
-
-        .btn-save {
-            background: linear-gradient(135deg, #00f6ff, #b400ff);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 246, 255, 0.3);
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:linear-gradient(135deg,#0a0a0a,#0a0f1a,#000428);font-family:'Inter',sans-serif;color:#fff;padding:20px}
+        .container{max-width:700px;margin:auto}
+        .card{background:rgba(255,255,255,0.03);backdrop-filter:blur(12px);border-radius:32px;border:1px solid rgba(0,246,255,0.2);padding:30px;margin-top:50px}
+        h2{margin-bottom:25px}
+        .setting-item{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid rgba(255,255,255,0.1)}
+        .toggle-switch{position:relative;display:inline-block;width:52px;height:26px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,0.2);border-radius:34px;transition:0.3s}
+        .slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background-color:white;border-radius:50%;transition:0.3s}
+        input:checked + .slider{background:linear-gradient(135deg,#00f6ff,#b400ff)}
+        input:checked + .slider:before{transform:translateX(26px)}
+        .save-btn{background:linear-gradient(105deg,#00c6fb,#005bea);border:none;border-radius:40px;padding:12px;width:100%;margin-top:25px;cursor:pointer;color:white;font-weight:bold}
     </style>
 </head>
 <body>
-
-<a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
-
 <div class="container">
-    <div class="header">
-        <h1><i class="fas fa-cog"></i> JAMALI MD - Bot Settings</h1>
-        <p>Configure your bot behavior and preferences</p>
+    <div class="card">
+        <h2><i class="fas fa-user-cog"></i> My Bot Preferences</h2>
+        <div id="settingsForm"></div>
+        <button class="save-btn" onclick="saveUserSettings()">Save Settings</button>
     </div>
-
-    <form id="settingsForm">
-        <div class="settings-card">
-            <h2><i class="fas fa-robot"></i> General Settings</h2>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Bot Prefix</h4>
-                    <p>Command prefix (default: .)</p>
-                </div>
-                <input type="text" id="prefix" value="." style="width: 100px;">
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Work Mode</h4>
-                    <p>public = all commands, private = owner only</p>
-                </div>
-                <select id="workType">
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="settings-card">
-            <h2><i class="fas fa-eye"></i> Auto Features</h2>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Auto View Status</h4>
-                    <p>Automatically view contact statuses</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="autoViewStatus" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Auto Like Status</h4>
-                    <p>Automatically like statuses</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="autoLikeStatus" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Auto Reply</h4>
-                    <p>Auto-reply to messages</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="autoReply" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Auto Typing</h4>
-                    <p>Show typing indicator</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="autoTyping">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Auto Recording</h4>
-                    <p>Show recording indicator</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="autoRecording">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <div class="settings-card">
-            <h2><i class="fas fa-shield-alt"></i> Security Settings</h2>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Anti-Call</h4>
-                    <p>Reject incoming calls</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="antiCall">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Anti-Delete</h4>
-                    <p>Detect and log deleted messages</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="antiDelete">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Read Messages (Blue Tick)</h4>
-                    <p>Automatically mark messages as read</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="readMessage">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <div class="settings-card">
-            <h2><i class="fas fa-users"></i> Group Settings</h2>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Welcome Message</h4>
-                    <p>Send welcome message to new members</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="welcomeEnable" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Goodbye Message</h4>
-                    <p>Send goodbye message when members leave</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="goodbyeEnable" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-            <div class="setting-row">
-                <div class="setting-info">
-                    <h4>Anti-Link</h4>
-                    <p>Detect and warn about links in groups</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="antiLink">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
-
-        <button type="button" class="btn-save" onclick="saveSettings()">
-            <i class="fas fa-save"></i> Save All Settings
-        </button>
-    </form>
 </div>
-
 <script>
-    async function saveSettings() {
-        const settings = {
-            PREFIX: document.getElementById('prefix').value,
-            WORK_TYPE: document.getElementById('workType').value,
-            AUTO_VIEW_STATUS: document.getElementById('autoViewStatus').checked ? 'true' : 'false',
-            AUTO_LIKE_STATUS: document.getElementById('autoLikeStatus').checked ? 'true' : 'false',
-            AUTO_REPLY_ENABLE: document.getElementById('autoReply').checked ? 'true' : 'false',
-            AUTO_TYPING: document.getElementById('autoTyping').checked ? 'true' : 'false',
-            AUTO_RECORDING: document.getElementById('autoRecording').checked ? 'true' : 'false',
-            ANTI_CALL: document.getElementById('antiCall').checked ? 'true' : 'false',
-            ANTI_DELETE: document.getElementById('antiDelete').checked ? 'true' : 'false',
-            READ_MESSAGE: document.getElementById('readMessage').checked ? 'true' : 'false',
-            WELCOME_ENABLE: document.getElementById('welcomeEnable').checked ? 'true' : 'false',
-            GOODBYE_ENABLE: document.getElementById('goodbyeEnable').checked ? 'true' : 'false'
-        };
+    const urlParams = new URLSearchParams(window.location.search);
+    const botNumber = urlParams.get('number') || '';
+    let currentSettings = {};
 
-        try {
-            const res = await fetch(`/api/config/global`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settings)
-            });
-            
-            if(res.ok) {
-                alert('✅ Settings saved successfully!');
-            } else {
-                alert('⚠️ Failed to save settings');
-            }
-        } catch(e) {
-            alert('Error saving settings');
-        }
+    async function loadUserSettings() {
+        if(!botNumber) return;
+        let res = await fetch(`/api/config?number=${botNumber}`);
+        currentSettings = await res.json();
+        renderToggles();
     }
 
-    async function loadSettings() {
-        try {
-            const res = await fetch('/api/config/global');
-            if(res.ok) {
-                const config = await res.json();
-                document.getElementById('prefix').value = config.PREFIX || '.';
-                document.getElementById('workType').value = config.WORK_TYPE || 'public';
-                document.getElementById('autoViewStatus').checked = config.AUTO_VIEW_STATUS === 'true';
-                document.getElementById('autoLikeStatus').checked = config.AUTO_LIKE_STATUS === 'true';
-                document.getElementById('autoReply').checked = config.AUTO_REPLY_ENABLE === 'true';
-                document.getElementById('autoTyping').checked = config.AUTO_TYPING === 'true';
-                document.getElementById('autoRecording').checked = config.AUTO_RECORDING === 'true';
-                document.getElementById('antiCall').checked = config.ANTI_CALL === 'true';
-                document.getElementById('antiDelete').checked = config.ANTI_DELETE === 'true';
-                document.getElementById('readMessage').checked = config.READ_MESSAGE === 'true';
-                document.getElementById('welcomeEnable').checked = config.WELCOME_ENABLE === 'true';
-                document.getElementById('goodbyeEnable').checked = config.GOODBYE_ENABLE === 'true';
-            }
-        } catch(e) {
-            console.error('Error loading settings:', e);
-        }
+    function renderToggles() {
+        const fields = [
+            {key:'AUTO_VIEW_STATUS', label:'Auto View Status'},
+            {key:'AUTO_LIKE_STATUS', label:'Auto Like Status'},
+            {key:'AUTO_REPLY_ENABLE', label:'Auto Reply'},
+            {key:'ANTI_CALL', label:'Anti-Call'},
+            {key:'ANTI_DELETE', label:'Anti-Delete'},
+            {key:'READ_MESSAGE', label:'Read Receipts'},
+            {key:'AUTO_TYPING', label:'Auto Typing'},
+            {key:'AUTO_RECORDING', label:'Auto Recording'}
+        ];
+        let html = '';
+        fields.forEach(f => {
+            let checked = currentSettings[f.key] === 'true';
+            html += `<div class="setting-item">
+                        <span>${f.label}</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="${f.key}" ${checked ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>`;
+        });
+        document.getElementById('settingsForm').innerHTML = html;
     }
 
-    loadSettings();
+    async function saveUserSettings() {
+        let updates = {};
+        const keys = ['AUTO_VIEW_STATUS','AUTO_LIKE_STATUS','AUTO_REPLY_ENABLE','ANTI_CALL','ANTI_DELETE','READ_MESSAGE','AUTO_TYPING','AUTO_RECORDING'];
+        keys.forEach(k => { updates[k] = document.getElementById(k).checked ? 'true' : 'false'; });
+        let res = await fetch('/api/config/update', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ number: botNumber, config: updates })
+        });
+        if(res.ok) alert('Settings updated');
+        else alert('Error');
+    }
+
+    if(botNumber) loadUserSettings();
+    else document.querySelector('.card h2').innerHTML = '<i class="fas fa-ban"></i> No bot selected';
 </script>
-
 </body>
-                                                                </html>
+</html>
