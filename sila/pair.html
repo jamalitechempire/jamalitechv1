@@ -1,139 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>JAMALI MD | Pair (Server 1-5)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:radial-gradient(circle at 10% 20%,#050b1a,#010105);font-family:'Inter',sans-serif;color:#fff;padding:20px}
-        .container{max-width:1200px;margin:0 auto}
-        h1{text-align:center;margin-bottom:20px;background:linear-gradient(135deg,#00f6ff,#b400ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-        .servers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px}
-        .server-card{background:rgba(12,15,30,0.6);backdrop-filter:blur(12px);border-radius:24px;border:1px solid rgba(0,246,255,0.2);padding:20px}
-        .server-title{font-size:1.2rem;font-weight:600;margin-bottom:15px;color:#00f6ff}
-        input{width:100%;background:#05080f;border:1px solid #2a2f50;border-radius:60px;padding:12px;color:#fff;margin:10px 0}
-        button{background:linear-gradient(95deg,#00c6fb,#005bea);border:none;border-radius:60px;padding:10px;font-weight:600;color:#fff;cursor:pointer;width:100%}
-        .code-box{background:#000000aa;border-radius:20px;padding:12px;text-align:center;margin:10px 0;cursor:pointer}
-        .code{font-size:1.1rem;letter-spacing:2px;color:#b400ff}
-        .status{font-size:0.75rem;text-align:center;margin-top:8px}
-        .online{color:#0f0}
-        .offline{color:#f66}
-        .footer{text-align:center;margin-top:40px;opacity:0.6}
-        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;padding:10px 20px;border-radius:40px;transition:0.3s;z-index:1000}
-        .toast.show{transform:translateX(-50%) translateY(0)}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JAMALI MD Pair">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<title>⚡ JAMALI MD | Pair Device</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050b);
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* animated background orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .orb-1 {
+    width: 60vw;
+    height: 60vw;
+    background: #00f2fe;
+    top: -20vh;
+    left: -20vw;
+    animation: float1 18s infinite alternate;
+  }
+
+  .orb-2 {
+    width: 50vw;
+    height: 50vw;
+    background: #4facfe;
+    bottom: -15vh;
+    right: -15vw;
+    animation: float2 22s infinite alternate;
+  }
+
+  .orb-3 {
+    width: 40vw;
+    height: 40vw;
+    background: #b721ff;
+    bottom: 30%;
+    left: 20%;
+    animation: float3 20s infinite alternate;
+  }
+
+  @keyframes float1 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(10%, 10%) scale(1.2); }
+  }
+  @keyframes float2 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-10%, -5%) scale(1.3); }
+  }
+  @keyframes float3 {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(5%, -10%) rotate(5deg); }
+  }
+
+  /* glass card */
+  .card {
+    position: relative;
+    z-index: 10;
+    max-width: 480px;
+    width: 100%;
+    background: rgba(12, 15, 25, 0.65);
+    backdrop-filter: blur(16px);
+    border-radius: 2rem;
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.05) inset;
+    padding: 2rem 1.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 242, 254, 0.12);
+    border: 1px solid rgba(0, 242, 254, 0.4);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #00f2fe;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge i {
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, #00f2fe, #b721ff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+    background: rgba(0,0,0,0.3);
+    width: fit-content;
+    padding: 5px 14px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .pulse {
+    width: 8px;
+    height: 8px;
+    background: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #0f0;
+    animation: pulseAnim 1.4s infinite;
+  }
+
+  @keyframes pulseAnim {
+    0% { opacity: 0.4; transform: scale(0.8);}
+    100% { opacity: 1; transform: scale(1.2);}
+  }
+
+  .status-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ccc;
+  }
+
+  /* input group */
+  .input-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .input-icon {
+    position: relative;
+  }
+
+  .input-icon i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #00f2fe;
+    opacity: 0.7;
+  }
+
+  input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1.5px solid rgba(0, 242, 254, 0.3);
+    border-radius: 1.5rem;
+    padding: 1rem 1rem 1rem 3rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    font-family: 'Inter', monospace;
+    transition: all 0.25s;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: #00f2fe;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    background: rgba(0,0,0,0.6);
+  }
+
+  /* primary btn */
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(105deg, #00c6fb 0%, #005bea 100%);
+    border: none;
+    border-radius: 2rem;
+    padding: 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 1.8rem;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover:not(:disabled)::after {
+    left: 100%;
+  }
+
+  .btn-primary:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.2);
+  }
+
+  /* result box */
+  .result-box {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border-radius: 1.5rem;
+    padding: 1rem;
+    margin-bottom: 1.8rem;
+    border: 1px solid rgba(183, 33, 255, 0.4);
+    transition: all 0.2s;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+  }
+
+  .result-box:hover {
+    border-color: #b721ff;
+    box-shadow: 0 0 20px rgba(183,33,255,0.3);
+    transform: scale(1.01);
+  }
+
+  .result-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-bottom: 6px;
+  }
+
+  .code {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 6px;
+    color: #b721ff;
+    text-shadow: 0 0 8px #b721ff80;
+    word-break: break-all;
+  }
+
+  .copy-hint {
+    font-size: 0.6rem;
+    margin-top: 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .result-box:hover .copy-hint {
+    opacity: 1;
+  }
+
+  /* 3 small buttons */
+  .action-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .action-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ddd;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .action-btn:hover {
+    background: rgba(0, 242, 254, 0.2);
+    border-color: #00f2fe;
+    color: #00f2fe;
+    transform: translateY(-2px);
+  }
+
+  footer {
+    font-size: 0.7rem;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.2rem;
+    margin-top: 0.5rem;
+    color: #888;
+    letter-spacing: 0.5px;
+  }
+
+  /* loading spinner inside button */
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #111214dd;
+    backdrop-filter: blur(16px);
+    padding: 10px 20px;
+    border-radius: 60px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 200;
+    transition: transform 0.25s ease;
+    border: 1px solid rgba(0,242,254,0.4);
+    color: #00f2fe;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* responsive */
+  @media (max-width: 500px) {
+    .card { padding: 1.5rem; }
+    h1 { font-size: 1.8rem; }
+    .code { font-size: 1.4rem; letter-spacing: 3px; }
+    .action-row { flex-wrap: wrap; }
+    .toast { white-space: normal; text-align: center; max-width: 85%; }
+  }
+
+  /* back button */
+  .back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.85rem;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    transition: 0.2s;
+  }
+
+  .back-btn:hover {
+    background: #00f2fe20;
+    border-color: #00f2fe;
+  }
+</style>
 </head>
 <body>
-<div class="container">
-    <h1><i class="fas fa-server"></i> JAMALI MD • PAIR (Server 1-5)</h1>
-    <div class="servers-grid" id="serversGrid"></div>
-    <div class="footer">Powered by JAMALI TECH TZ | Secure Pairing | Server 1-5</div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Dashboard</a>
+
+<div class="card">
+  <div class="badge">
+    <i class="fas fa-bolt"></i> JAMALI MD | PAIRING SYSTEM
+  </div>
+  <h1>Connect Device</h1>
+  <div class="status-chip">
+    <div class="pulse"></div>
+    <span class="status-text" id="statusText">System Online · Ready</span>
+  </div>
+
+  <div class="input-group">
+    <div class="input-icon">
+      <i class="fas fa-phone-alt"></i>
+      <input type="tel" id="number" value="255" placeholder="e.g., 255784062158" autocomplete="off">
+    </div>
+  </div>
+
+  <button class="btn-primary" id="generateBtn">
+    <i class="fas fa-key"></i> <span>GENERATE PAIRING CODE</span>
+  </button>
+
+  <div class="result-box" id="resultBox" onclick="copyCode()">
+    <div class="result-label">⚡ PAIRING CODE</div>
+    <div class="code" id="resultCode">—— —— ——</div>
+    <div class="copy-hint"><i class="fas fa-copy"></i> tap to copy</div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" onclick="toggleMusic()"><i class="fas fa-music"></i> Music</button>
+    <button class="action-btn" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
+    <button class="action-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-cog"></i> Panel</button>
+  </div>
+
+  <footer>
+    <i class="fas fa-crown"></i> Powered by <strong>JAMALI TECH TZ</strong> | © 2026
+  </footer>
 </div>
-<div id="toast" class="toast"></div>
 
+<div id="toastMsg" class="toast"></div>
+
+<!-- audio element for bg music -->
+<audio id="bgMusic" src="https://files.catbox.moe/iwpfp2.mp3" loop preload="auto"></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
 <script>
-    const TOTAL_SERVERS = 5;
-    const ADMIN_PASSWORD = "JAMALI2026";
-    let serverStatus = {};
+  let musicPlaying = false;
+  let isGenerating = false;
+  const audio = document.getElementById('bgMusic');
+  const generateBtn = document.getElementById('generateBtn');
+  const numberInput = document.getElementById('number');
+  const resultSpan = document.getElementById('resultCode');
 
-    function showToast(msg, type='info') {
-        const t = document.getElementById('toast');
-        t.innerText = msg;
-        t.style.borderLeftColor = type === 'error' ? '#ff4444' : '#00f6ff';
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
+  function showToast(msg, type = 'info') {
+    const toast = document.getElementById('toastMsg');
+    toast.textContent = msg;
+    toast.style.color = type === 'error' ? '#ff6b6b' : '#00f2fe';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function toggleMusic() {
+    if (musicPlaying) {
+      audio.pause();
+      musicPlaying = false;
+      showToast('🔇 Music off', 'info');
+    } else {
+      audio.play().catch(e => console.log("autoplay blocked"));
+      musicPlaying = true;
+      showToast('🎵 Music on', 'info');
+    }
+  }
+
+  function setButtonLoading(loading) {
+    const btn = generateBtn;
+    const span = btn.querySelector('span');
+    if (loading) {
+      isGenerating = true;
+      btn.disabled = true;
+      span.innerHTML = '<div class="spinner"></div> PROCESSING...';
+    } else {
+      isGenerating = false;
+      btn.disabled = false;
+      span.innerHTML = 'GENERATE PAIRING CODE';
+    }
+  }
+
+  async function getCode() {
+    if (isGenerating) return;
+
+    let rawNumber = numberInput.value.trim();
+    let cleanNumber = rawNumber.replace(/\D/g, '');
+    if (cleanNumber.length < 9) {
+      resultSpan.innerText = 'INVALID';
+      showToast('Enter valid number with country code', 'error');
+      return;
     }
 
-    async function checkStatus(serverNum, number) {
-        if (!number || number.length < 9) return;
-        try {
-            const res = await fetch(`/status?number=${number}`);
-            const data = await res.json();
-            serverStatus[serverNum] = data.isConnected ? 'connected' : 'disconnected';
-            const statusDiv = document.getElementById(`status-${serverNum}`);
-            if (statusDiv) {
-                statusDiv.innerHTML = serverStatus[serverNum] === 'connected' ? '<span class="online">✅ CONNECTED</span>' : '<span class="offline">❌ NOT CONNECTED</span>';
-            }
-        } catch(e) { serverStatus[serverNum] = 'offline'; }
-    }
+    setButtonLoading(true);
+    resultSpan.innerHTML = '<div class="spinner" style="margin:0 auto;"></div>';
 
-    async function generateCode(serverNum, number) {
-        if (!number || number.length < 9) {
-            showToast(`Server ${serverNum}: Invalid number`, 'error');
-            return;
-        }
-        const codeDiv = document.getElementById(`code-${serverNum}`);
-        const btn = document.getElementById(`btn-${serverNum}`);
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ...';
-        codeDiv.innerText = '⏳';
-        try {
-            const res = await fetch(`/code?number=${number}`);
-            const data = await res.json();
-            if (data.code) {
-                codeDiv.innerText = data.code;
-                showToast(`Server ${serverNum}: Code generated`, 'success');
-                setTimeout(() => checkStatus(serverNum, number), 3000);
-            } else if (data.status === 'already_connected') {
-                codeDiv.innerText = 'ALREADY ACTIVE';
-                serverStatus[serverNum] = 'connected';
-                const statusDiv = document.getElementById(`status-${serverNum}`);
-                if (statusDiv) statusDiv.innerHTML = '<span class="online">✅ CONNECTED</span>';
-                showToast(`Server ${serverNum}: Already connected`, 'error');
-            } else {
-                codeDiv.innerText = 'FAILED';
-                showToast(`Server ${serverNum}: Failed`, 'error');
-            }
-        } catch(err) {
-            codeDiv.innerText = 'ERROR';
-            showToast(`Server ${serverNum}: Network error`, 'error');
-        }
-        btn.disabled = false;
-        btn.innerHTML = 'GENERATE';
-    }
+    try {
+      const response = await fetch(`/code?number=${cleanNumber}`);
+      const data = await response.json();
 
-    function copyCode(serverNum) {
-        const code = document.getElementById(`code-${serverNum}`).innerText;
-        if (code && !['——', '⏳', 'FAILED', 'ERROR', 'ALREADY ACTIVE'].includes(code)) {
-            navigator.clipboard.writeText(code);
-            showToast(`Server ${serverNum}: Code copied`);
-        } else {
-            showToast(`Server ${serverNum}: No valid code`, 'error');
-        }
+      if (data.code) {
+        resultSpan.innerText = data.code;
+        showToast(`✅ Code for +${cleanNumber} generated!`, 'success');
+      } else if (data.status === 'already_connected') {
+        resultSpan.innerText = 'ALREADY ACTIVE';
+        showToast(`Bot is already connected for +${cleanNumber}`, 'info');
+      } else {
+        resultSpan.innerText = 'FAILED';
+        showToast(data.error || 'Pairing failed, try again', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      resultSpan.innerText = 'SERVER ERROR';
+      showToast('Network error. Check your connection.', 'error');
+    } finally {
+      setButtonLoading(false);
     }
+  }
 
-    function renderServers() {
-        const grid = document.getElementById('serversGrid');
-        let html = '';
-        for (let i = 1; i <= TOTAL_SERVERS; i++) {
-            html += `
-                <div class="server-card">
-                    <div class="server-title"><i class="fas fa-microchip"></i> SERVER ${i}</div>
-                    <input type="tel" id="number-${i}" placeholder="WhatsApp number (e.g., 255784062158)" value="255">
-                    <button class="btn-neon" id="btn-${i}" onclick="generateCode(${i}, document.getElementById('number-${i}').value.replace(/\\D/g,''))">GENERATE</button>
-                    <div class="code-box" onclick="copyCode(${i})">
-                        <div class="code" id="code-${i}">—— —— ——</div>
-                        <div style="font-size:0.7rem">tap to copy</div>
-                    </div>
-                    <div class="status" id="status-${i}">⚪ NOT PAIRED</div>
-                </div>
-            `;
-        }
-        grid.innerHTML = html;
-        for (let i = 1; i <= TOTAL_SERVERS; i++) {
-            const input = document.getElementById(`number-${i}`);
-            input.addEventListener('change', () => {
-                const num = input.value.replace(/\D/g, '');
-                if (num.length >= 9) checkStatus(i, num);
-                else document.getElementById(`status-${i}`).innerHTML = '<span class="offline">⚠️ INVALID</span>';
-            });
-        }
+  function copyCode() {
+    let codeText = resultSpan.innerText;
+    if (!codeText || codeText === '—— —— ——' || codeText === 'INVALID' || codeText === 'FAILED' || codeText === 'SERVER ERROR' || codeText === 'ALREADY ACTIVE' || isGenerating) {
+      showToast('No valid code to copy', 'error');
+      return;
     }
+    navigator.clipboard.writeText(codeText).then(() => {
+      const original = resultSpan.innerText;
+      resultSpan.innerText = '✓ COPIED!';
+      setTimeout(() => {
+        resultSpan.innerText = original;
+      }, 1200);
+      showToast('Code copied to clipboard!', 'success');
+    }).catch(() => showToast('Failed to copy', 'error'));
+  }
 
-    renderServers();
+  // Attach event
+  generateBtn.onclick = getCode;
+  // Allow enter key
+  numberInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') getCode();
+  });
+
+  // Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => console.log('SW registered')).catch(err => console.log('SW error', err));
+    });
+  }
 </script>
 </body>
 </html>
